@@ -1,9 +1,9 @@
 package io.hasura.shivam.chitchat.frags;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,14 +92,12 @@ public class DrawFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 canvas.undo();
-                Toast.makeText(DrawFrag.this.getContext(),"undo called",Toast.LENGTH_SHORT).show();
             }
         });
         redoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvas.redo();
-                Toast.makeText(DrawFrag.this.getContext(),"redo called",Toast.LENGTH_SHORT).show();
             }
         });
         clearBtn.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +122,15 @@ public class DrawFrag extends Fragment {
             }
         });
 
+        moreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
+                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.drawing_option, null);
+                mBottomSheetDialog.setContentView(sheetView);
+                mBottomSheetDialog.show();
+            }
+        });
 
 
         return view;

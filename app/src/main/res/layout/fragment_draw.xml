@@ -16,8 +16,8 @@
     <!-- TODO: Update blank fragment layout -->
     <com.android.graphics.CanvasView
         android:id="@+id/canvas"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
+        android:layout_width="500dp"
+        android:layout_height="800dp"
         android:layout_gravity="center_horizontal" />
 
 

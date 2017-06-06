@@ -2,8 +2,6 @@ package io.hasura.shivam.chitchat.activities;
 
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -12,19 +10,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import io.hasura.shivam.chitchat.R;
-import io.hasura.shivam.chitchat.frags.ChatFrag;
+import io.hasura.shivam.chitchat.frags.Chats;
 import io.hasura.shivam.chitchat.frags.DrawFrag;
 
-public class ChatActivity extends AppCompatActivity implements ChatFrag.OnFragmentInteractionListener,DrawFrag.OnFragmentInteractionListener{
+public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -113,7 +106,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFrag.OnFragme
 
             if(position==0)
             {
-                return ChatFrag.newInstance("","");
+                return new Chats();
             }
 
             return DrawFrag.newInstance("","");
