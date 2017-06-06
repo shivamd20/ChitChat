@@ -1,12 +1,17 @@
 package io.hasura.shivam.chitchat.frags;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.android.graphics.CanvasView;
 
 import io.hasura.shivam.chitchat.R;
 
@@ -27,6 +32,11 @@ public class DrawFrag extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+    private CanvasView canvas = null;
+
+    ImageButton undoBtn,redoBtn,clearBtn,penBtn,moreBtn,eraserBtn,saveBtn;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +75,58 @@ public class DrawFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_draw, container, false);
+        View view= inflater.inflate(R.layout.fragment_draw, container, false);
+
+        this.canvas = (CanvasView)view.findViewById(R.id.canvas);
+
+        undoBtn=(ImageButton)view.findViewById(R.id.undobtn);
+        redoBtn=(ImageButton)view.findViewById(R.id.redobtn);
+        clearBtn=(ImageButton)view.findViewById(R.id.clearbtn);
+        eraserBtn=(ImageButton)view.findViewById(R.id.eraserBtn);
+        moreBtn=(ImageButton)view.findViewById(R.id.morebtn);
+        penBtn=(ImageButton)view.findViewById(R.id.penbtn);
+        saveBtn=(ImageButton)view.findViewById(R.id.savebtn);
+
+
+        undoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.undo();
+                Toast.makeText(DrawFrag.this.getContext(),"undo called",Toast.LENGTH_SHORT).show();
+            }
+        });
+        redoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.redo();
+                Toast.makeText(DrawFrag.this.getContext(),"redo called",Toast.LENGTH_SHORT).show();
+            }
+        });
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.clear();
+            }
+        });
+
+        eraserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
+        penBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.setMode(CanvasView.Mode.DRAW);
+            }
+        });
+
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
