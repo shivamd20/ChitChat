@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +15,7 @@ import android.view.MenuItem;
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.frags.Chats;
 import io.hasura.shivam.chitchat.frags.DrawFrag;
+import io.hasura.shivam.chitchat.frags.mChat.ViewPagerRemovingSwipe;
 
 public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragmentInteractionListener{
 
@@ -30,9 +30,9 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * The {@link io.hasura.shivam.chitchat.frags.mChat.ViewPagerRemovingSwipe} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private ViewPagerRemovingSwipe mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,10 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPagerRemovingSwipe) findViewById(R.id.container);
+
+        mViewPager.setPagingEnabled(false);
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -106,8 +109,11 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
 
             if(position==0)
             {
+                mViewPager.setPagingEnabled(true);
                 return new Chats();
             }
+
+            mViewPager.setPagingEnabled(false);
 
             return DrawFrag.newInstance("","");
         }

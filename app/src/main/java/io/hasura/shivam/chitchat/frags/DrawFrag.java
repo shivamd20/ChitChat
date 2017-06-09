@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,16 +120,21 @@ public class DrawFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 canvas.setMode(CanvasView.Mode.DRAW);
+                canvas.setDrawer(CanvasView.Drawer.PEN);
             }
         });
 
         moreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
-                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.drawing_option, null);
-                mBottomSheetDialog.setContentView(sheetView);
-                mBottomSheetDialog.show();
+//                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
+//                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.drawing_option, null);
+//                mBottomSheetDialog.setContentView(sheetView);
+//                mBottomSheetDialog.show();
+
+                BottomSheetDialogFragment bottomSheetDialogFragment = new OptionMenu(canvas);
+                bottomSheetDialogFragment.show(DrawFrag.this.getFragmentManager(), bottomSheetDialogFragment.getTag());
+
             }
         });
 
