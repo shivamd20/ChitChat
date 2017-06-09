@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.graphics.CanvasView;
 
 import io.hasura.shivam.chitchat.R;
+import io.hasura.shivam.chitchat.canvasview.CanvasView;
 
 /**
  * A simple {@link Fragment} subclass.

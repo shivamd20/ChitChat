@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.android.graphics.CanvasView;
 
 import io.hasura.shivam.chitchat.R;
+import io.hasura.shivam.chitchat.canvasview.CanvasView;
 
 /**
  * Created by shivam on 10/6/17.
@@ -31,6 +31,10 @@ public class OptionMenu extends BottomSheetDialogFragment {
             bgImageBtn,bgOpacityBtn,bgBlurBtn,lineButtButton,lineRoundBtn,lineSquareBtn,
             fontFamilyBtn,fontSizeBtn;
 
+   public OptionMenu()
+    {
+        super();
+    }
    public OptionMenu(CanvasView canvasView)
     {
         super();
