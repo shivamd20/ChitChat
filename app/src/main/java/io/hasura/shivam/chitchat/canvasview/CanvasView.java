@@ -159,11 +159,11 @@ public class CanvasView extends View {
 
         if (this.mode == Mode.ERASER) {
             // Eraser
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            paint.setARGB(0, 0, 0, 0);
+//            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+//            paint.setARGB(0, 0, 0, 0);
 
-            // paint.setColor(this.baseColor);
-            // paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
+             paint.setColor(this.baseColor);
+             paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
         } else {
             // Otherwise
             paint.setColor(this.paintStrokeColor);
@@ -316,6 +316,7 @@ public class CanvasView extends View {
      *
      * @param event This is argument of onTouchEvent method
      */
+
     private void onActionMove(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
@@ -553,7 +554,7 @@ public class CanvasView extends View {
     public void clear() {
         Path path = new Path();
         path.moveTo(0F, 0F);
-        path.addRect(0F, 0F, 1000F, 1000F, Path.Direction.CCW);
+        path.addRect(0F, 0F, super.getWidth(), super.getHeight(), Path.Direction.CCW);
         path.close();
 
         Paint paint = new Paint();

@@ -112,7 +112,7 @@ public class DrawFrag extends Fragment {
             @Override
             public void onClick(View v) {
 
-
+canvas.setMode(CanvasView.Mode.ERASER);
             }
         });
 
