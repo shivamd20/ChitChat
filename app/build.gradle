@@ -35,4 +35,5 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
     testCompile 'junit:junit:4.12'
     compile 'com.github.infotech-group:CanvasView:1.0.0'
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
 }

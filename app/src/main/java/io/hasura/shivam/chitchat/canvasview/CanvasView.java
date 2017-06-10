@@ -357,7 +357,7 @@ public class CanvasView extends View {
                             double radius    = Math.sqrt(Math.pow(distanceX, 2.0) + Math.pow(distanceY, 2.0));
 
                             path.reset();
-                            path.addCircle(this.startX, this.startY, (float)radius, Path.Direction.CCW);
+                            path.addCircle(this.startX, this.startY, (float)radius-50, Path.Direction.CCW);
                             break;
                         case ELLIPSE :
                             RectF rect = new RectF(this.startX, this.startY, x, y);

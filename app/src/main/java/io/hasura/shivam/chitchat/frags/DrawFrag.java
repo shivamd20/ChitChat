@@ -1,17 +1,25 @@
 package io.hasura.shivam.chitchat.frags;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.canvasview.CanvasView;
@@ -34,10 +42,12 @@ public class DrawFrag extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    LinearLayout toolbarBar;
+
 
     private CanvasView canvas = null;
 
-    ImageButton undoBtn,redoBtn,clearBtn,penBtn,moreBtn,eraserBtn,saveBtn;
+    ImageButton undoBtn,redoBtn,clearBtn,penBtn,moreBtn,eraserBtn,saveBtn,colorPicker;
 
     private OnFragmentInteractionListener mListener;
 
@@ -87,6 +97,42 @@ public class DrawFrag extends Fragment {
         moreBtn=(ImageButton)view.findViewById(R.id.morebtn);
         penBtn=(ImageButton)view.findViewById(R.id.penbtn);
         saveBtn=(ImageButton)view.findViewById(R.id.savebtn);
+        colorPicker=(ImageButton)view.findViewById(R.id.color_btn_frt) ;
+
+        colorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPickerDialogBuilder
+                        .with(getContext())
+                        .setTitle("Choose color")
+                        .initialColor(canvas.getBaseColor())
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(12)
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
+                            @Override
+                            public void onColorSelected(int selectedColor) {
+
+                                // toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+                            }
+                        })
+                        .setPositiveButton("ok", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                canvas.setPaintStrokeColor(selectedColor);
+
+                                colorPicker.setColorFilter(selectedColor);
+                                // changeBackgroundColor(selectedColor);
+                            }
+                        })
+//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        })
+                        .build()
+                        .show();
+            }
+        });
 
 
         undoBtn.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +152,39 @@ public class DrawFrag extends Fragment {
             public void onClick(View v) {
                 canvas.clear();
             }
+        });
+
+        toolbarBar=(LinearLayout) view.findViewById(R.id.toolbar_fnt);
+
+        toolbarBar.setOnTouchListener(new View.OnTouchListener() {
+
+                                          float dX, dY;
+
+                                          @Override
+                                          public boolean onTouch(View view, MotionEvent event) {
+
+
+                                              switch (event.getAction()) {
+
+                                                  case MotionEvent.ACTION_DOWN:
+
+                                                      dX = view.getX() - event.getRawX();
+                                                      dY = view.getY() - event.getRawY();
+                                                      break;
+
+                                                  case MotionEvent.ACTION_MOVE:
+
+                                                      view.animate()
+                                                              .x(event.getRawX() + dX)
+                                                              .y(event.getRawY() + dY)
+                                                              .setDuration(0)
+                                                              .start();
+                                                      break;
+                                                  default:
+                                                      return false;
+                                              }
+                                              return true;
+                                          }
         });
 
         eraserBtn.setOnClickListener(new View.OnClickListener() {
