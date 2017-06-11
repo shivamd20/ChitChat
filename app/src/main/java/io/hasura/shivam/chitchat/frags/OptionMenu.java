@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,7 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Toast;
+import android.widget.RadioButton;
 
 
 import com.flask.colorpicker.ColorPickerView;
@@ -43,11 +48,19 @@ public class OptionMenu extends BottomSheetDialogFragment {
     CanvasView canvasView;
    public  static final int SELECT_PHOTO=100;
 
-    ImageButton lineBtn,circleBtn,rectangleBtn,elipseBtn,curveBtn,textBtn,brushColorBtn,brushWidthBtn,
-            enterTextBtn,saveBtn,shareBtn,forwardBtn;
-    Button strokeBtn,fillBtn,fill_strokeBtn,
-            bgImageBtn,bgOpacityBtn,bgBlurBtn,lineButtButton,lineRoundBtn,lineSquareBtn,
-            fontFamilyBtn,fontSizeBtn;
+    public static final byte BG_OPICITY=1,FONT_SIZE=2,BRUSH_WIDTH=3,TEXT_SIZE=4,BG_BLUR=5;
+
+    static int SEEK_OPTION=3;
+
+    ImageButton brushColorBtn,
+           shareBtn,forwardBtn;
+    Button  bgImageBtn,
+            fontFamilyBtn;
+
+
+    RadioButton brushWidthBtn,bgBlurBtn,bgOpacityBtn,penBtn,strokeBtn,fillBtn,fill_strokeBtn,lineButtButton,lineRoundBtn,lineSquareBtn,lineBtn,circleBtn,rectangleBtn,elipseBtn,curveBtn,textSizeBtn,font_size_btn;
+
+    SeekBar seekBar;
 
    public OptionMenu()
     {
@@ -66,7 +79,13 @@ public class OptionMenu extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         View view = View.inflate(getContext(), R.layout.drawing_option, null);
 
-        lineBtn=(ImageButton) view.findViewById(R.id.draw_line_btn);
+        seekBar=(SeekBar)view.findViewById(R.id.seekBar);
+
+        penBtn=(RadioButton) view.findViewById(R.id.penbtn);
+
+//        seekBar.setProgress((int)canvasView.getPaintStrokeWidth());
+
+        lineBtn=(RadioButton) view.findViewById(R.id.draw_line_btn);
 
         lineBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,57 +94,58 @@ public class OptionMenu extends BottomSheetDialogFragment {
             }
         });
 
-        circleBtn=(ImageButton) view.findViewById(R.id.draw_circle_btn);
+        penBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.setDrawer(CanvasView.Drawer.PEN);
+            }
+        });
+
+        circleBtn=(RadioButton) view.findViewById(R.id.draw_circle_btn);
         circleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvasView.setDrawer(CanvasView.Drawer.CIRCLE);
             }
         });
-        rectangleBtn=(ImageButton) view.findViewById(R.id.draw_rect_btn);
+        rectangleBtn=(RadioButton) view.findViewById(R.id.draw_rect_btn);
         rectangleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvasView.setDrawer(CanvasView.Drawer.RECTANGLE);
             }
         });
-        elipseBtn=(ImageButton) view.findViewById(R.id.draw_oval_btn);
+        elipseBtn=(RadioButton) view.findViewById(R.id.draw_oval_btn);
         elipseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvasView.setDrawer(CanvasView.Drawer.ELLIPSE);
             }
         });
-        curveBtn=(ImageButton) view.findViewById(R.id.draw_curve_btn);
+        curveBtn=(RadioButton) view.findViewById(R.id.draw_curve_btn);
         curveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvasView.setDrawer(CanvasView.Drawer.QUADRATIC_BEZIER);
             }
         });
-        textBtn=(ImageButton) view.findViewById(R.id.text_mode_btn);
-        textBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canvasView.setText("SAMPLE TEXT");
-                canvasView.setMode(CanvasView.Mode.TEXT);
-            }
-        });
-        strokeBtn=(Button) view.findViewById(R.id.brush_stroke_btn);
+        textSizeBtn=(RadioButton) view.findViewById(R.id.font_sz_btn);
+
+        strokeBtn=(RadioButton) view.findViewById(R.id.brush_stroke_btn);
         strokeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvasView.setPaintStyle(Paint.Style.STROKE);
             }
         });
-        fillBtn=(Button) view.findViewById(R.id.brush_fill_btn);
+        fillBtn=(RadioButton) view.findViewById(R.id.brush_fill_btn);
         fillBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 canvasView.setPaintStyle(Paint.Style.FILL);
             }
         });
-        fill_strokeBtn=(Button) view.findViewById(R.id.fill_n_str_btn);
+        fill_strokeBtn=(RadioButton) view.findViewById(R.id.fill_n_str_btn);
         fill_strokeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,20 +191,44 @@ public class OptionMenu extends BottomSheetDialogFragment {
             }
         });
 
-        brushWidthBtn=(ImageButton) view.findViewById(R.id.brush_width_btn);
-        bgImageBtn=(Button) view.findViewById(R.id.bg_img_btn);
-        bgOpacityBtn=(Button) view.findViewById(R.id.bg_opicity_btn);
-        bgBlurBtn=(Button) view.findViewById(R.id.bg_blur_btn);
-        lineButtButton=(Button) view.findViewById(R.id.cap_butt_btn);
-        lineRoundBtn=(Button) view.findViewById(R.id.round_cap_btn);
-        lineSquareBtn=(Button) view.findViewById(R.id.sqre_cap_btn);
+        brushWidthBtn=(RadioButton) view.findViewById(R.id.brush_width_btn);
+        bgOpacityBtn=(RadioButton) view.findViewById(R.id.bg_opicity_btn);
+        bgBlurBtn=(RadioButton) view.findViewById(R.id.bg_blur_btn);
+        lineButtButton=(RadioButton) view.findViewById(R.id.cap_butt_btn);
+
+        lineButtButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.setLineCap(Paint.Cap.BUTT);
+            }
+        });
+        lineRoundBtn=(RadioButton) view.findViewById(R.id.round_cap_btn);
+
+        lineRoundBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.setLineCap(Paint.Cap.ROUND);
+            }
+        });
+
+
+        lineSquareBtn=(RadioButton) view.findViewById(R.id.sqre_cap_btn);
+
+        lineSquareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.setLineCap(Paint.Cap.SQUARE);
+            }
+        });
+
         fontFamilyBtn=(Button) view.findViewById(R.id.text_font_btn);
-        fontSizeBtn=(Button) view.findViewById(R.id.font_sz_btn);
+        font_size_btn=(RadioButton) view.findViewById(R.id.font_sz_btn);
         // enterTextBtn=(ImageButton) view.findViewById(R.id.te);
-        saveBtn=(ImageButton) view.findViewById(R.id.savebtn);
         shareBtn=(ImageButton) view.findViewById(R.id.share_btn);
         forwardBtn=(ImageButton) view.findViewById(R.id.forward_btn);
 
+
+        bgImageBtn=(Button) view.findViewById(R.id.bg_img_btn);
         bgImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,11 +238,187 @@ public class OptionMenu extends BottomSheetDialogFragment {
             }
         });
 
+        brushWidthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SEEK_OPTION=BRUSH_WIDTH;
+                optionMenuFill();
+
+            //    seekBar.setThumb(Dr);
+            }
+        });
+
+        bgOpacityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SEEK_OPTION=BG_OPICITY;
+                optionMenuFill();
+            }
+        });
+
+        bgBlurBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SEEK_OPTION=BG_BLUR;
+                optionMenuFill();
+            }
+        });
+        textSizeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SEEK_OPTION=TEXT_SIZE;
+                optionMenuFill();
+
+            }
+        });
+
+
 
 
 
         dialog.setContentView(view);
 
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                switch (SEEK_OPTION)
+                {
+                    case BG_OPICITY:
+
+                        canvasView.setOpacity(progress);
+                        break;
+
+                    case BRUSH_WIDTH:
+
+                        canvasView.setPaintStrokeWidth(progress);
+                        break;
+
+                    case BG_BLUR:
+                        canvasView.setBlur( progress);
+                        break;
+
+                    case TEXT_SIZE:
+
+                        canvasView.setFontSize(progress);
+                        break;
+
+                    default:
+                }
+
+                // canvasView.setPaintStrokeWidth(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        optionMenuFill();
+
+    }
+
+
+
+
+
+
+    void optionMenuFill()
+    {
+        // DRAW
+
+        if(canvasView.getDrawer()== CanvasView.Drawer.CIRCLE)
+        {
+            circleBtn.toggle();
+
+        } else  if(canvasView.getDrawer()== CanvasView.Drawer.RECTANGLE)
+        {
+            rectangleBtn.toggle();
+
+        }else  if(canvasView.getDrawer()== CanvasView.Drawer.QUADRATIC_BEZIER)
+        {
+            curveBtn.toggle();
+
+        }
+        else   if(canvasView.getDrawer()== CanvasView.Drawer.PEN)
+        {
+
+            penBtn.toggle();
+        }
+        else   if(canvasView.getDrawer()== CanvasView.Drawer.ELLIPSE)
+        {
+
+            elipseBtn.toggle();
+
+        } else  if(canvasView.getDrawer()== CanvasView.Drawer.LINE)
+        {
+            lineBtn.toggle();
+        }
+
+       if(canvasView.getPaintStyle()==Paint.Style.FILL)
+       {
+           fillBtn.toggle();
+       }
+       else  if(canvasView.getPaintStyle()==Paint.Style.FILL_AND_STROKE)
+       {
+           canvasView.setPaintFillColor(Color.RED);
+           fill_strokeBtn.toggle();
+       }
+       else  if(canvasView.getPaintStyle()==Paint.Style.STROKE)
+       {
+           strokeBtn.toggle();
+       }
+
+       //LINE CAP
+       if(canvasView.getLineCap()== Paint.Cap.BUTT)
+       {
+           lineButtButton.toggle();
+
+       } else if(canvasView.getLineCap()== Paint.Cap.ROUND)
+       {
+           lineRoundBtn.toggle();
+
+       }else if(canvasView.getLineCap()== Paint.Cap.SQUARE)
+       {
+            lineSquareBtn.toggle();
+       }
+
+
+       //SEEK OPTION
+       switch (SEEK_OPTION)
+       {
+           case BG_OPICITY:
+
+               bgOpacityBtn.toggle();
+               seekBar.setProgress(canvasView.getOpacity());
+               break;
+
+           case BRUSH_WIDTH:
+
+               brushWidthBtn.toggle();
+               seekBar.setProgress((int) canvasView.getPaintStrokeWidth());
+               break;
+
+           case BG_BLUR:
+               bgBlurBtn.toggle();
+               seekBar.setProgress((int)canvasView.getBlur());
+               break;
+
+           case TEXT_SIZE:
+
+               font_size_btn.toggle();
+               seekBar.setProgress((int)canvasView.getFontSize());
+               break;
+
+           default:
+       }
     }
 
     @Nullable
@@ -206,7 +426,7 @@ public class OptionMenu extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View  view= super.onCreateView(inflater, container, savedInstanceState);
 
-        brushColorBtn.setColorFilter(canvasView.getBaseColor());
+//        brushColorBtn.setColorFilter(canvasView.getBaseColor());
 
         return view;
 
@@ -240,18 +460,9 @@ public class OptionMenu extends BottomSheetDialogFragment {
 
             }catch (IOException ioe)
             {
-                Log.e("error image",ioe.toString());
+                Log.e("error getting image",ioe.toString());
             }
 
-
-            //Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-
-
-            // Do something with the bitmap
-
-
-            // At the end remember to close the cursor or you will end with the RuntimeException!
-           // cursor.close();
         }
     }
 }

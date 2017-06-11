@@ -1,18 +1,25 @@
 package io.hasura.shivam.chitchat.frags;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
+import android.os.Environment;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -20,6 +27,13 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.canvasview.CanvasView;
@@ -47,9 +61,11 @@ public class DrawFrag extends Fragment {
 
     private CanvasView canvas = null;
 
-    ImageButton undoBtn,redoBtn,clearBtn,penBtn,moreBtn,eraserBtn,saveBtn,colorPicker;
+    ImageButton undoBtn,redoBtn,clearBtn,moreBtn,saveBtn,colorPicker;
+    RadioButton drawBtn,eraserBtn,textBtn;
 
     private OnFragmentInteractionListener mListener;
+
 
     public DrawFrag() {
         // Required empty public constructor
@@ -82,6 +98,8 @@ public class DrawFrag extends Fragment {
         }
     }
 
+    int toolbarTopMargin=0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,11 +111,71 @@ public class DrawFrag extends Fragment {
         undoBtn=(ImageButton)view.findViewById(R.id.undobtn);
         redoBtn=(ImageButton)view.findViewById(R.id.redobtn);
         clearBtn=(ImageButton)view.findViewById(R.id.clearbtn);
-        eraserBtn=(ImageButton)view.findViewById(R.id.eraserBtn);
+        eraserBtn=(RadioButton)view.findViewById(R.id.eraserBtn);
         moreBtn=(ImageButton)view.findViewById(R.id.morebtn);
-        penBtn=(ImageButton)view.findViewById(R.id.penbtn);
+        textBtn=(RadioButton)view.findViewById(R.id.textMode);
+        drawBtn=(RadioButton)view.findViewById(R.id.drawBtn);
         saveBtn=(ImageButton)view.findViewById(R.id.savebtn);
         colorPicker=(ImageButton)view.findViewById(R.id.color_btn_frt) ;
+
+        undoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.undo();
+            }
+        });
+        redoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.redo();
+            }
+        });
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.clear();
+            }
+        });
+
+        toolbarBar=(LinearLayout) view.findViewById(R.id.toolbar_fnt);
+
+        drawBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvas.setMode(CanvasView.Mode.DRAW);
+            }
+        });
+
+
+        textBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final EditText textip = new EditText(DrawFrag.this.getContext());
+
+                textip.setText(canvas.getText());
+
+// Set the default text to a link of the Queen
+                textip.setHint("Enter Text to draw");
+
+                new AlertDialog.Builder(DrawFrag.this.getContext())
+                        .setTitle("Text")
+                        .setMessage("Enter Text")
+                        .setView(textip)
+                        .setPositiveButton("done", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String text = textip.getText().toString();
+
+                                canvas.setText(text);
+
+                                canvas.setMode(CanvasView.Mode.TEXT);
+
+                            }
+                        })
+                        .show();
+            }
+        });
+        //   dragBtn=(ImageButton)view.findViewById(R.id.dragButton);
 
         colorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,57 +213,6 @@ public class DrawFrag extends Fragment {
         });
 
 
-        undoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canvas.undo();
-            }
-        });
-        redoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canvas.redo();
-            }
-        });
-        clearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canvas.clear();
-            }
-        });
-
-        toolbarBar=(LinearLayout) view.findViewById(R.id.toolbar_fnt);
-
-        toolbarBar.setOnTouchListener(new View.OnTouchListener() {
-
-                                          float dX, dY;
-
-                                          @Override
-                                          public boolean onTouch(View view, MotionEvent event) {
-
-
-                                              switch (event.getAction()) {
-
-                                                  case MotionEvent.ACTION_DOWN:
-
-                                                      dX = view.getX() - event.getRawX();
-                                                      dY = view.getY() - event.getRawY();
-                                                      break;
-
-                                                  case MotionEvent.ACTION_MOVE:
-
-                                                      view.animate()
-                                                              .x(event.getRawX() + dX)
-                                                              .y(event.getRawY() + dY)
-                                                              .setDuration(0)
-                                                              .start();
-                                                      break;
-                                                  default:
-                                                      return false;
-                                              }
-                                              return true;
-                                          }
-        });
 
         eraserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,13 +222,6 @@ canvas.setMode(CanvasView.Mode.ERASER);
             }
         });
 
-        penBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                canvas.setMode(CanvasView.Mode.DRAW);
-                canvas.setDrawer(CanvasView.Drawer.PEN);
-            }
-        });
 
         moreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,9 +237,18 @@ canvas.setMode(CanvasView.Mode.ERASER);
             }
         });
 
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                storeImage(canvas.getBitmap());
+            }
+        });
 
         return view;
     }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -237,6 +266,14 @@ canvas.setMode(CanvasView.Mode.ERASER);
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+    }
+
+    @Override
+    public void onStart() {
+
+        super.onStart();
+
     }
 
     @Override
@@ -258,5 +295,52 @@ canvas.setMode(CanvasView.Mode.ERASER);
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void storeImage(Bitmap image) {
+        File pictureFile = getOutputMediaFile();
+        if (pictureFile == null) {
+            Log.d("",
+                    "Error creating media file, check storage permissions: ");// e.getMessage());
+            return;
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.close();
+
+            Toast.makeText(getContext(),"image saved to "+pictureFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+
+        } catch (FileNotFoundException e) {
+            Log.d("", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("", "Error accessing file: " + e.getMessage());
+        }
+
+
+    }
+    private  File getOutputMediaFile(){
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+//                + "/Android/data/"
+//                + getContext().getApplicationContext().getPackageName()
+                + "/Pictures/ChitChat");
+
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+        File mediaFile;
+        String mImageName="CHITCHAT"+ timeStamp +".jpg";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
     }
 }

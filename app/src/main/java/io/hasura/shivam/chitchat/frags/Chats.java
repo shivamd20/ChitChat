@@ -2,6 +2,11 @@ package io.hasura.shivam.chitchat.frags;
 
         import java.util.ArrayList;
         import java.util.Random;
+
+        import android.annotation.TargetApi;
+        import android.content.Context;
+        import android.graphics.Canvas;
+        import android.graphics.drawable.BitmapDrawable;
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
         import android.view.LayoutInflater;
@@ -11,6 +16,8 @@ package io.hasura.shivam.chitchat.frags;
         import android.widget.EditText;
         import android.widget.ImageButton;
         import android.widget.ListView;
+
+        import com.android.graphics.CanvasView;
 
         import io.hasura.shivam.chitchat.R;
         import io.hasura.shivam.chitchat.frags.mChat.ChatAdapter;
@@ -26,6 +33,7 @@ public class Chats extends Fragment implements OnClickListener {
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
     ListView msgListView;
+    CanvasView canvasView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,12 +55,29 @@ public class Chats extends Fragment implements OnClickListener {
         chatlist = new ArrayList<ChatMessage>();
         chatAdapter = new ChatAdapter(getActivity(), chatlist);
         msgListView.setAdapter(chatAdapter);
+
+        drawBackground();
+
         return view;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+
+    @TargetApi(16)
+    void drawBackground(){
+
+        if (android.os.Build.VERSION.SDK_INT >= 16){
+            // Do something for lollipop and above versions
+
+            if(canvasView!=null) {
+                Canvas canvas=new Canvas();
+                msgListView.setBackground(new BitmapDrawable(getResources(),canvasView.getBitmap()));
+            }
+        } else{
+            // do something for phones running an SDK before lollipop
+        }
+
     }
+
 
     public void sendTextMessage(View v) {
         String message = msg_edittext.getEditableText().toString();
@@ -79,3 +104,4 @@ public class Chats extends Fragment implements OnClickListener {
     }
 
 }
+

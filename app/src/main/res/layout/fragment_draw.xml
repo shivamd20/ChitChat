@@ -1,41 +1,62 @@
-<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    tools:context="io.hasura.shivam.chitchat.frags.DrawFrag"
-    android:orientation="vertical"
-    android:layout_gravity="center"
-    android:gravity="center">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <io.hasura.shivam.chitchat.canvasview.CanvasView
-        android:id="@+id/canvas"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="match_parent">
 
 
-</LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:context="io.hasura.shivam.chitchat.frags.DrawFrag">
+
+            <!-- TODO: Update blank fragment layout -->
+
+            <io.hasura.shivam.chitchat.canvasview.CanvasView
+                android:id="@+id/canvas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal" />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/toolbar_fnt"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="40dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="10dp"
         android:background="@color/colorPrimary"
-        android:foregroundGravity="fill_horizontal"
-        android:gravity="bottom|center_vertical">
+        android:gravity="end">
+
+        <ImageButton
+            android:id="@+id/morebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:foregroundGravity="center_vertical"
+            app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
 
         <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:foregroundGravity="bottom">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -82,26 +103,6 @@
                     app:srcCompat="@drawable/ic_clear_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/penbtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/ic_edit_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/eraserBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/eraser_variant" />
-
-                <ImageButton
                     android:id="@+id/color_btn_frt"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -110,19 +111,52 @@
                     android:foregroundGravity="center_vertical"
                     app:srcCompat="@drawable/ic_color_lens_black_24dp" />
 
-                <ImageButton
-                    android:id="@+id/morebtn"
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/drawBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="draw"
+                        android:textAllCaps="true"
+                        android:textSize="8sp" />
+
+                    <RadioButton
+                        android:id="@+id/textMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+
+                        android:foregroundGravity="center_vertical"
+                        android:text="text"
+                        android:textAllCaps="true"
+                        android:textSize="8sp"
+                        app:srcCompat="@drawable/ic_text_format_black_24dp" />
+
+                    <RadioButton
+                        android:id="@+id/eraserBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:foregroundGravity="center_vertical"
+                        android:text="erase"
+                        android:textAllCaps="true"
+                        android:textSize="8sp"
+                        app:srcCompat="@drawable/eraser_variant" />
+                </RadioGroup>
 
             </LinearLayout>
         </HorizontalScrollView>
 
     </LinearLayout>
 
-
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

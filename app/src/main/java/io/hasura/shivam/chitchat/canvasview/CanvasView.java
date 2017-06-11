@@ -27,7 +27,7 @@ import java.util.List;
 public class CanvasView extends View {
 
     // Enumeration for Mode
-    public enum Mode {
+    public   enum Mode {
         DRAW,
         TEXT,
         ERASER;
