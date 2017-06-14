@@ -9,8 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
@@ -19,7 +18,9 @@ import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * This class defines fields and methods for drawing.
@@ -162,7 +163,7 @@ public class CanvasView extends View {
 //            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 //            paint.setARGB(0, 0, 0, 0);
 
-             paint.setColor(this.baseColor);
+            paint.setColor(this.baseColor);
              paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
         } else {
             // Otherwise
@@ -420,6 +421,7 @@ public class CanvasView extends View {
             canvas.drawBitmap(this.bitmap, 0F, 0F, emptyPaint);
         }
 
+
         for (int i = 0; i < this.historyPointer; i++) {
             Path path   = this.pathLists.get(i);
             Paint paint = this.paintLists.get(i);
@@ -438,6 +440,7 @@ public class CanvasView extends View {
      * @param event the instance of MotionEvent
      * @return
      */
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -551,30 +554,41 @@ public class CanvasView extends View {
      *
      * @return
      */
+
+  public   void undoToStart()
+    {
+        while (canUndo())
+            undo();
+    }
+
+
     public void clear() {
         Path path = new Path();
         path.moveTo(0F, 0F);
         path.addRect(0F, 0F, super.getWidth(), super.getHeight(), Path.Direction.CCW);
         path.close();
 
+
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
+
+
 
         if (this.historyPointer == this.pathLists.size()) {
             this.pathLists.add(path);
             this.paintLists.add(paint);
             this.historyPointer++;
-//        } else {
-//            // On the way of Undo or Redo
-//            this.pathLists.set(this.historyPointer, path);
-//            this.paintLists.set(this.historyPointer, paint);
-//            this.historyPointer++;
-//
-//            for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
-//                this.pathLists.remove(this.historyPointer);
-//                this.paintLists.remove(this.historyPointer);
-//            }
+        } else {
+            // On the way of Undo or Redo
+            this.pathLists.set(this.historyPointer, path);
+            this.paintLists.set(this.historyPointer, paint);
+            this.historyPointer++;
+
+            for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
+                this.pathLists.remove(this.historyPointer);
+                this.paintLists.remove(this.historyPointer);
+            }
         }
 
         this.text = "";
@@ -901,4 +915,49 @@ public class CanvasView extends View {
         return this.getBitmapAsByteArray(CompressFormat.PNG, 100);
     }
 
+    public void paintBucket( Point pt,  int replacementColor)
+    {
+        Bitmap bmp=this.getBitmap();
+
+        int targetColor=bmp.getPixel(pt.x,pt.y);
+
+        FloodFill(bmp,pt,targetColor,replacementColor);
+
+        Path p=new Path();
+
+    }
+
+    private Queue<Point> FloodFill(Bitmap bmp, Point pt, int targetColor, int replacementColor){
+        Queue<Point> q = new LinkedList<>();
+        q.add(pt);
+        while (q.size() > 0) {
+            Point n = q.poll();
+            if (bmp.getPixel(n.x, n.y) != targetColor)
+                continue;
+
+            Point w = n, e = new Point(n.x + 1, n.y);
+            while ((w.x > 0) && (bmp.getPixel(w.x, w.y) == targetColor)) {
+                bmp.setPixel(w.x, w.y, replacementColor);
+                if ((w.y > 0) && (bmp.getPixel(w.x, w.y - 1) == targetColor))
+                    q.add(new Point(w.x, w.y - 1));
+                if ((w.y < bmp.getHeight() - 1)
+                        && (bmp.getPixel(w.x, w.y + 1) == targetColor))
+                    q.add(new Point(w.x, w.y + 1));
+                w.x--;
+            }
+            while ((e.x < bmp.getWidth() - 1)
+                    && (bmp.getPixel(e.x, e.y) == targetColor)) {
+                bmp.setPixel(e.x, e.y, replacementColor);
+
+                if ((e.y > 0) && (bmp.getPixel(e.x, e.y - 1) == targetColor))
+                    q.add(new Point(e.x, e.y - 1));
+                if ((e.y < bmp.getHeight() - 1)
+                        && (bmp.getPixel(e.x, e.y + 1) == targetColor))
+                    q.add(new Point(e.x, e.y + 1));
+                e.x++;
+            }
+        }
+
+    return  q;
+    }
 }

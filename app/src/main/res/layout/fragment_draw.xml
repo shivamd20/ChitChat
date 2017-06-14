@@ -126,6 +126,7 @@
                         android:checked="true"
                         android:text="draw"
                         android:textAllCaps="true"
+                        android:textColor="@android:color/background_light"
                         android:textSize="8sp" />
 
                     <RadioButton
@@ -138,6 +139,7 @@
                         android:foregroundGravity="center_vertical"
                         android:text="text"
                         android:textAllCaps="true"
+                        android:textColor="@android:color/background_light"
                         android:textSize="8sp"
                         app:srcCompat="@drawable/ic_text_format_black_24dp" />
 
@@ -150,6 +152,7 @@
                         android:foregroundGravity="center_vertical"
                         android:text="erase"
                         android:textAllCaps="true"
+                        android:textColor="@android:color/background_light"
                         android:textSize="8sp"
                         app:srcCompat="@drawable/eraser_variant" />
                 </RadioGroup>

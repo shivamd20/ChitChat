@@ -133,7 +133,7 @@ public class DrawFrag extends Fragment {
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                canvas.clear();
+                canvas.undoToStart();
             }
         });
 
@@ -171,7 +171,12 @@ public class DrawFrag extends Fragment {
                                 canvas.setMode(CanvasView.Mode.TEXT);
 
                             }
-                        })
+                        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        drawBtn.toggle();
+                    }
+                })
                         .show();
             }
         });
@@ -231,7 +236,10 @@ canvas.setMode(CanvasView.Mode.ERASER);
 //                mBottomSheetDialog.setContentView(sheetView);
 //                mBottomSheetDialog.show();
 
-                BottomSheetDialogFragment bottomSheetDialogFragment = new OptionMenu(canvas);
+                OptionMenu bottomSheetDialogFragment = new OptionMenu();
+
+                bottomSheetDialogFragment.setCanvasView(canvas);
+
                 bottomSheetDialogFragment.show(DrawFrag.this.getFragmentManager(), bottomSheetDialogFragment.getTag());
 
             }
@@ -243,6 +251,13 @@ canvas.setMode(CanvasView.Mode.ERASER);
                 storeImage(canvas.getBitmap());
             }
         });
+
+//        paintBucket.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                canvas.setMode(CanvasView.Mode.PAINT_BUCKET);
+//            }
+//        });
 
         return view;
     }

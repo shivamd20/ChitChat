@@ -2,28 +2,31 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:layout_weight="1"
         android:background="@color/colorPrimaryDark"
         android:max="255" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <RadioButton
@@ -33,11 +36,11 @@
                 android:layout_weight="1"
                 android:ellipsize="middle"
                 android:text=" opicity"
-                android:textAlignment="textStart"
                 android:textAllCaps="true"
+                android:textColor="@android:color/background_light"
                 android:textOff="OPICITY"
                 android:textOn="OPICITY"
-                android:textSize="8sp" />
+                android:textSize="10sp" />
 
             <RadioButton
                 android:id="@+id/brush_width_btn"
@@ -46,7 +49,8 @@
                 android:layout_weight="1"
                 android:text="BRUSH WIDTH"
                 android:textAllCaps="true"
-                android:textSize="8sp"
+                android:textColor="@android:color/background_light"
+                android:textSize="10sp"
                 app:srcCompat="@drawable/ic_album_black_24dp" />
 
             <RadioButton
@@ -55,7 +59,8 @@
                 android:layout_height="match_parent"
                 android:text="BLUR"
                 android:textAllCaps="true"
-                android:textSize="8sp" />
+                android:textColor="@android:color/background_light"
+                android:textSize="10sp" />
 
             <RadioButton
                 android:id="@+id/font_sz_btn"
@@ -63,17 +68,14 @@
                 android:layout_height="match_parent"
                 android:text="TEXT SIZE"
                 android:textAllCaps="true"
-                android:textSize="8sp"
+                android:textColor="@android:color/background_light"
+                android:textSize="10sp"
                 android:textStyle="italic" />
         </RadioGroup>
 
     </LinearLayout>
 
-    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,159 +86,114 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="fill_vertical|center_horizontal|center"
-                    android:gravity="center_vertical|fill_vertical|center_horizontal"
-                    android:text="DRAW"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_brush_black_24dp" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical|fill_vertical|center_horizontal|fill_horizontal|center"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center"
-                    android:text="Line Cap"
-                    android:textAllCaps="true"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical|fill_vertical|center_horizontal|fill_horizontal|center"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|fill_vertical|center_horizontal"
-                    android:text="background"
-                    android:textAllCaps="true"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical|fill_vertical|center_horizontal|fill_horizontal|center"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|fill_vertical|center_horizontal"
-                    android:text="TEXT"
-                    android:textAllCaps="true"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.FitWindowsLinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="left"
-                    android:foregroundGravity="left"
-                    android:gravity="left|center_vertical">
 
-                    <RadioGroup
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alwaysDrawnWithCache="true"
+                    android:animateLayoutChanges="true"
+                    android:animationCache="true"
+                    android:fadeScrollbars="true"
+                    android:hapticFeedbackEnabled="true">
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <RadioButton
-                            android:id="@+id/penbtn"
-                            android:layout_width="wrap_content"
+                        <RadioGroup
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:orientation="horizontal">
 
-                            android:foregroundGravity="center_vertical"
-                            android:text="PEN"
-                            app:srcCompat="@drawable/ic_edit_black_24dp" />
+                            <RadioButton
+                                android:id="@+id/penbtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
 
-                        <RadioButton
-                            android:id="@+id/draw_line_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:text="line"
-                            android:textAllCaps="true"
-                            android:textSize="12sp"
-                            android:textStyle="italic"
-                            app:srcCompat="@drawable/ic_timeline_black_24dp" />
+                                android:foregroundGravity="center_vertical"
+                                android:text="PEN"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/background_light"
+                                app:srcCompat="@drawable/ic_edit_black_24dp" />
 
-                        <RadioButton
-                            android:id="@+id/draw_curve_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:text="curve"
-                            android:textAllCaps="true"
-                            android:textSize="12sp"
-                            android:textStyle="italic"
-                            app:srcCompat="@drawable/ic_gesture_black_24dp" />
+                            <RadioButton
+                                android:id="@+id/draw_line_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:text="line"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/background_light"
+                                android:textSize="12sp"
+                                android:textStyle="italic"
+                                app:srcCompat="@drawable/ic_timeline_black_24dp" />
 
-                        <RadioButton
-                            android:id="@+id/draw_circle_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:checked="false"
-                            android:text="circle"
-                            android:textAllCaps="true"
-                            android:textSize="12sp"
-                            android:textStyle="italic"
-                            app:srcCompat="@drawable/ic_blur_circular_black_24dp" />
+                            <RadioButton
+                                android:id="@+id/draw_curve_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:text="curve"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/background_light"
+                                android:textSize="12sp"
+                                android:textStyle="italic"
+                                app:srcCompat="@drawable/ic_gesture_black_24dp" />
 
-                        <RadioButton
-                            android:id="@+id/draw_rect_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:text="rectangle"
-                            android:textAllCaps="true"
-                            android:textSize="12sp"
-                            android:textStyle="italic"
-                            app:srcCompat="@drawable/ic_pages_black_24dp" />
+                            <RadioButton
+                                android:id="@+id/draw_circle_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:text="circle"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/background_light"
+                                android:textSize="12sp"
+                                android:textStyle="italic"
+                                app:srcCompat="@drawable/ic_blur_circular_black_24dp" />
 
-                        <RadioButton
-                            android:id="@+id/draw_oval_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_weight="1"
-                            android:text="oval"
-                            android:textAllCaps="true"
-                            android:textSize="12sp"
-                            android:textStyle="italic"
-                            app:srcCompat="@drawable/ic_blur_circular_black_24dp" />
+                            <RadioButton
+                                android:id="@+id/draw_rect_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:text="rectangle"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/background_light"
+                                android:textSize="12sp"
+                                android:textStyle="italic"
+                                app:srcCompat="@drawable/ic_pages_black_24dp" />
 
-                    </RadioGroup>
+                            <RadioButton
+                                android:id="@+id/draw_oval_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1"
+                                android:text="oval"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/background_light"
+                                android:textSize="12sp"
+                                android:textStyle="italic"
+                                app:srcCompat="@drawable/ic_blur_circular_black_24dp" />
 
-                </android.support.v7.widget.FitWindowsLinearLayout>
+                        </RadioGroup>
+                    </LinearLayout>
+                </HorizontalScrollView>
 
                 <android.support.v7.widget.FitWindowsLinearLayout
                     android:layout_width="wrap_content"
@@ -260,6 +217,7 @@
                             android:layout_weight="1"
                             android:text="FILL"
                             android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
                             android:textSize="12sp"
                             android:textStyle="italic" />
 
@@ -271,6 +229,7 @@
                             android:layout_weight="1"
                             android:text="FILL AND STROKE"
                             android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
                             android:textSize="12sp"
                             android:textStyle="italic" />
 
@@ -282,6 +241,7 @@
                             android:layout_weight="1"
                             android:text="STROKE"
                             android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
                             android:textSize="12sp"
                             android:textStyle="italic" />
                     </RadioGroup>
@@ -312,6 +272,7 @@
                             android:text="ROUND"
                             android:textAlignment="center"
                             android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
                             android:textSize="12sp"
                             android:textStyle="italic" />
 
@@ -325,6 +286,7 @@
                             android:text="SQUARE"
                             android:textAlignment="center"
                             android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
                             android:textSize="12sp"
                             android:textStyle="italic" />
 
@@ -338,6 +300,7 @@
                             android:text="butt"
                             android:textAlignment="center"
                             android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
                             android:textSize="12sp"
                             android:textStyle="italic" />
                     </RadioGroup>
@@ -395,7 +358,6 @@
                         android:textStyle="italic" />
 
 
-
                 </android.support.v7.widget.FitWindowsLinearLayout>
 
                 <android.support.v7.widget.FitWindowsLinearLayout
@@ -425,6 +387,5 @@
 
         </LinearLayout>
 
-    </HorizontalScrollView>
 
 </LinearLayout>

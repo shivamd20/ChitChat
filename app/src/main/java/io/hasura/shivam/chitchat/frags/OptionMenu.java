@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,16 +62,18 @@ public class OptionMenu extends BottomSheetDialogFragment {
     SeekBar seekBar;
 
    public OptionMenu()
-    {
+   {
+
         super();
     }
-   public OptionMenu(CanvasView canvasView)
-    {
-        super();
 
-        this.canvasView=canvasView;
 
+    public void setCanvasView(CanvasView canvasView) {
+
+        this.canvasView = canvasView;
     }
+
+
 
     @Override
     public void setupDialog(final Dialog dialog, int style) {
@@ -181,11 +182,12 @@ public class OptionMenu extends BottomSheetDialogFragment {
                                // changeBackgroundColor(selectedColor);
                             }
                         })
-//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
                         .build()
                         .show();
             }
@@ -445,10 +447,9 @@ public class OptionMenu extends BottomSheetDialogFragment {
 
             try {
 
-
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), pickedImage);
 
-                bitmap=Bitmap.createScaledBitmap(bitmap,bitmap.getWidth()/2,bitmap.getHeight()/2,false);
+                bitmap=Bitmap.createScaledBitmap(bitmap,bitmap.getWidth(),bitmap.getHeight(),false);
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;

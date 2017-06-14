@@ -37,4 +37,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.github.infotech-group:CanvasView:1.0.0'
     compile 'com.github.QuadFlask:colorpicker:0.0.13'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
 }
