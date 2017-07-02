@@ -1,5 +1,5 @@
 
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,10 +11,7 @@
         android:layout_height="match_parent">
 
 
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:fab="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -33,133 +30,138 @@
 
         </LinearLayout>
 
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/toolbar_fnt"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="end">
-
-        <ImageButton
-            android:id="@+id/morebtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:foregroundGravity="center_vertical"
-            app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
-
-        <HorizontalScrollView
+        <LinearLayout
+            android:id="@+id/toolbar_fnt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:foregroundGravity="bottom">
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/transparent"
+            android:gravity="end">
 
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/morebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:foregroundGravity="center_vertical"
+                app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
 
-                <ImageButton
-                    android:id="@+id/undobtn"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:foregroundGravity="bottom">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/ic_undo_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/redobtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/ic_redo_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/savebtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-
-                    android:foregroundGravity="center_vertical|fill_horizontal|center"
-                    app:srcCompat="@drawable/ic_save_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/clearbtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/ic_clear_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/color_btn_frt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:foregroundGravity="center_vertical"
-                    app:srcCompat="@drawable/ic_color_lens_black_24dp" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/drawBtn"
+                    <ImageButton
+                        android:id="@+id/undobtn"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:checked="true"
-                        android:text="draw"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="8sp" />
+                        android:foregroundGravity="center_vertical"
+                        app:srcCompat="@drawable/ic_undo_black_24dp"
+                        tools:alpha="5" />
 
-                    <RadioButton
-                        android:id="@+id/textMode"
+                    <ImageButton
+                        android:id="@+id/redobtn"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
 
                         android:foregroundGravity="center_vertical"
-                        android:text="text"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="8sp"
-                        app:srcCompat="@drawable/ic_text_format_black_24dp" />
+                        app:srcCompat="@drawable/ic_redo_black_24dp"
+                        tools:alpha="5" />
 
-                    <RadioButton
-                        android:id="@+id/eraserBtn"
+                    <ImageButton
+                        android:id="@+id/savebtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+
+                        android:foregroundGravity="center_vertical|fill_horizontal|center"
+                        app:srcCompat="@drawable/ic_save_black_24dp"
+                        tools:alpha="5" />
+
+                    <ImageButton
+                        android:id="@+id/clearbtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+
+                        android:foregroundGravity="center_vertical"
+                        app:srcCompat="@drawable/ic_clear_black_24dp"
+                        tools:alpha="5" />
+
+                    <ImageButton
+                        android:id="@+id/color_btn_frt"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:foregroundGravity="center_vertical"
-                        android:text="erase"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="8sp"
-                        app:srcCompat="@drawable/eraser_variant" />
-                </RadioGroup>
+                        app:srcCompat="@drawable/ic_color_lens_black_24dp"
+                        tools:alpha="5" />
 
-            </LinearLayout>
-        </HorizontalScrollView>
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-    </LinearLayout>
+                        <RadioButton
+                            android:id="@+id/drawBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="draw"
+                            android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="8sp" />
+
+                        <RadioButton
+                            android:id="@+id/textMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+
+                            android:foregroundGravity="center_vertical"
+                            android:text="text"
+                            android:textAllCaps="true"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="8sp"
+                            app:srcCompat="@drawable/ic_text_format_black_24dp" />
+
+                        <!--<RadioButton-->
+                        <!--android:id="@+id/eraserBtn"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:foregroundGravity="center_vertical"-->
+                        <!--android:text="erase"-->
+                        <!--android:textAllCaps="true"-->
+                        <!--android:textColor="@android:color/background_light"-->
+                        <!--android:textSize="8sp"-->
+                        <!--app:srcCompat="@drawable/eraser_variant" />-->
+                    </RadioGroup>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

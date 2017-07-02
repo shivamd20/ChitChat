@@ -164,7 +164,7 @@ public class CanvasView extends View {
 //            paint.setARGB(0, 0, 0, 0);
 
             paint.setColor(this.baseColor);
-             paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
+            paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
         } else {
             // Otherwise
             paint.setColor(this.paintStrokeColor);
@@ -555,7 +555,7 @@ public class CanvasView extends View {
      * @return
      */
 
-  public   void undoToStart()
+    public   void undoToStart()
     {
         while (canUndo())
             undo();
@@ -958,6 +958,6 @@ public class CanvasView extends View {
             }
         }
 
-    return  q;
+        return  q;
     }
 }

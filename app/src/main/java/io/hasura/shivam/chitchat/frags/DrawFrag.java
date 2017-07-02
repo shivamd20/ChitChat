@@ -1,14 +1,11 @@
 package io.hasura.shivam.chitchat.frags;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -19,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -62,7 +58,7 @@ public class DrawFrag extends Fragment {
     private CanvasView canvas = null;
 
     ImageButton undoBtn,redoBtn,clearBtn,moreBtn,saveBtn,colorPicker;
-    RadioButton drawBtn,eraserBtn,textBtn;
+    RadioButton drawBtn,textBtn;
 
     private OnFragmentInteractionListener mListener;
 
@@ -111,7 +107,7 @@ public class DrawFrag extends Fragment {
         undoBtn=(ImageButton)view.findViewById(R.id.undobtn);
         redoBtn=(ImageButton)view.findViewById(R.id.redobtn);
         clearBtn=(ImageButton)view.findViewById(R.id.clearbtn);
-        eraserBtn=(RadioButton)view.findViewById(R.id.eraserBtn);
+        //eraserBtn=(RadioButton)view.findViewById(R.id.eraserBtn);
         moreBtn=(ImageButton)view.findViewById(R.id.morebtn);
         textBtn=(RadioButton)view.findViewById(R.id.textMode);
         drawBtn=(RadioButton)view.findViewById(R.id.drawBtn);
@@ -174,7 +170,7 @@ public class DrawFrag extends Fragment {
                         }).setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        drawBtn.toggle();
+                        textBtn.toggle();
                     }
                 })
                         .show();
@@ -219,13 +215,13 @@ public class DrawFrag extends Fragment {
 
 
 
-        eraserBtn.setOnClickListener(new View.OnClickListener() {
+   /*     eraserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 canvas.setMode(CanvasView.Mode.ERASER);
             }
-        });
+        });*/
 
 
         moreBtn.setOnClickListener(new View.OnClickListener() {
