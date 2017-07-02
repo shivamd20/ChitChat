@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "195767904910",
+    "project_id": "chitchat-7a5d3"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195767904910:android:e38da9db0c5cf161",
+        "android_client_info": {
+          "package_name": "io.hasura.shivam.chitchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "195767904910-04nqr0a05i9905pf601b2pogmq1u2bnc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.hasura.shivam.chitchat",
+            "certificate_hash": "bd637e7158cd72d106e7b801684a01374c021124"
+          }
+        },
+        {
+          "client_id": "195767904910-6rtvdupcf2194htcnhekls6a3sk0kdt1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdR4g2cG4PuQodydF45zCT9ggXS_5tjTY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
