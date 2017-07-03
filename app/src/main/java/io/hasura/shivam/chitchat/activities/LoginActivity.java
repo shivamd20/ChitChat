@@ -86,26 +86,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
-        try {
-
-            Hasura.setProjectConfig(new ProjectConfig.Builder()
-                    //.setProjectName("projectName") // or it can be .setCustomBaseDomain("somthing.com")
-                    .setCustomBaseDomain("shivam.hasura.me")
-                    .enableOverHttp() // if not included, then https by default
-                    .setDefaultRole("customDefaultRole") // if not included then "user" role is used by default
-                    .setApiVersion(2) //if not included v1 is used by default
-                    .build())
-                    .enableLogs() // not included by default
-                    .initialise(this);
             hasuraUser=Hasura.getClient().getUser();
-        }
-        catch (HasuraInitException hse)
-        {
-            hse.printStackTrace();
-            System.exit(00);
-        }
+
 
         // Set up the login form.
         //mNameView = (AutoCompleteTextView) findViewById(R.id.name);

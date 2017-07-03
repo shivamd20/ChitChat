@@ -35,6 +35,7 @@ public class Chats extends Fragment implements OnClickListener {
     ListView msgListView;
     CanvasView canvasView;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

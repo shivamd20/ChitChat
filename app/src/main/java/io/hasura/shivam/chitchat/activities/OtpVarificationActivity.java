@@ -81,6 +81,7 @@ public class OtpVarificationActivity extends AppCompatActivity {
 
                         finish();
 
+
                     }
 
                     @Override
