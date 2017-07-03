@@ -1,33 +1,144 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.hasura.shivam.chitchat.activities.OtpVarificationActivity">
+    android:alpha="5"
+    android:background="@drawable/patternbg"
+    android:gravity="center_vertical|center_horizontal|center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="io.hasura.shivam.chitchat.activities.LoginActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_otp_varification" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fab_add"
+        android:fontFamily="casual"
+        android:lineSpacingExtra="14sp"
+        android:linksClickable="true"
+        android:longClickable="true"
+        android:requiresFadingEdge="horizontal"
+        android:rotationX="-12"
+        android:rotationY="6"
+        android:selectAllOnFocus="true"
+        android:shadowColor="@color/colorAccent"
+        android:shadowDx="15"
+        android:shadowDy="15"
+        android:shadowRadius="20"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="50"
+        android:background="@drawable/ic_assignment_turned_in_black_24dp"
+        android:backgroundTint="?attr/colorBackgroundFloating"
+        android:padding="4dp">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardviewlogin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:padding="10dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="21dp"
+            app:contentPadding="15dp">
+
+            <LinearLayout
+                android:id="@+id/email_login_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/welcome" />
+
+                <!--android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_name"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/otp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_otp"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:numeric="integer"
+                        android:phoneNumber="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <!--android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password"
+                        android:imeActionId="@+id/login"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout-->
+
+                <Button
+                    android:id="@+id/varify_otp_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/ic_filter_list_black_24dp"
+                    android:backgroundTint="@color/cardview_shadow_end_color"
+                    android:elevation="8dp"
+                    android:text="@string/varifiyotpbutton"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </ScrollView>
+
+</LinearLayout>

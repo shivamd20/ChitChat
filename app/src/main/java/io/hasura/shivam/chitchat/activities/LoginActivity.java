@@ -3,6 +3,7 @@ package io.hasura.shivam.chitchat.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.hasura.sdk.Hasura;
+import io.hasura.sdk.HasuraErrorCode;
 import io.hasura.sdk.HasuraUser;
 import io.hasura.sdk.ProjectConfig;
 import io.hasura.sdk.exception.HasuraException;
@@ -54,6 +56,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
+    public static final String ISNEW="isNew";
+
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -64,10 +68,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+   // private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mNameView;
+   // private AutoCompleteTextView mNameView;
    // private EditText mPasswordView;
     private EditText mMobileView;
     private View mProgressView;
@@ -81,6 +85,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
         try {
 
             Hasura.setProjectConfig(new ProjectConfig.Builder()
@@ -92,7 +99,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     .build())
                     .enableLogs() // not included by default
                     .initialise(this);
-
             hasuraUser=Hasura.getClient().getUser();
         }
         catch (HasuraInitException hse)
@@ -101,16 +107,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             System.exit(00);
         }
 
-
-
         // Set up the login form.
-        mNameView = (AutoCompleteTextView) findViewById(R.id.name);
+        //mNameView = (AutoCompleteTextView) findViewById(R.id.name);
 
         mMobileView=(EditText) findViewById(R.id.mobile);
 
         cardView=(CardView)findViewById(R.id.cardviewlogin);
 
-        populateAutoComplete();
+        //populateAutoComplete();
 
   /*      mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -136,48 +140,47 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
+//    private void populateAutoComplete() {
+//        if (!mayRequestContacts()) {
+//            return;
+//        }
+//        getLoaderManager().initLoader(0, null, this);
+//    }
 
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mNameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
+//    private boolean mayRequestContacts() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            return true;
+//        }
+//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+//            return true;
+//        }
+//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+//            Snackbar.make(mNameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+//                    .setAction(android.R.string.ok, new View.OnClickListener() {
+//                        @Override
+//                        @TargetApi(Build.VERSION_CODES.M)
+//                        public void onClick(View v) {
+//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//                        }
+//                    });
+//        } else {
+//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//        }
+//        return false;
+//    }
 
     /**
      * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        if (requestCode == REQUEST_READ_CONTACTS) {
+//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                //populateAutoComplete();
+//            }
+//        }
+//    }
 
 
     /**
@@ -186,12 +189,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+//        if (mAuthTask != null) {
+//            return;
+//        }
 
         // Reset errors.
-        mNameView.setError(null);
+        //mNameView.setError(null);
      //   mPasswordView.setError(null);
         mMobileView.setError(null);
 
@@ -216,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
 
-        String name = mNameView.getText().toString();
+       // String name = mNameView.getText().toString();
      //   String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -229,7 +232,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            cancel = true;
 //        }
 
-        // Check for a valid email address.
+       /* // Check for a valid email address.
         if (TextUtils.isEmpty(name)) {
             mNameView.setError(getString(R.string.error_field_required));
             focusView = mNameView;
@@ -238,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mNameView.setError(getString(R.string.error_invalid_name));
             focusView = mNameView;
             cancel = true;
-        }
+        }*/
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -250,14 +253,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
 
             hasuraUser.setMobile(mobile+"");
-            hasuraUser.setUsername(name);
+            hasuraUser.setUsername(mobile+"@chitchat");
 
             hasuraUser.otpSignUp(new SignUpResponseListener() {
                 @Override
                 public void onSuccessAwaitingVerification(HasuraUser hasuraUser) {
                     Toast.makeText(LoginActivity.this,"awaiting verification",Toast.LENGTH_SHORT).show();
                     showProgress(false);
+                    Intent intent=new Intent(LoginActivity.this,OtpVarificationActivity.class);
+
+                    intent.putExtra(ISNEW,true);
+
+                    startActivity(intent);
                 }
+
 
                 @Override
                 public void onSuccess(HasuraUser hasuraUser) {
@@ -266,8 +275,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 @Override
                 public void onFailure(HasuraException e) {
-                    Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-                    showProgress(false);
+
+                    e.getCode();
+
+
+
+                    if(e.getCode()== HasuraErrorCode.USER_ALREADY_EXISTS) {
+
+                        Intent intent=new Intent(LoginActivity.this,OtpVarificationActivity.class);
+
+                        intent.putExtra(ISNEW,false);
+
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Toast.makeText(LoginActivity.this,"It seems that our server is down now, Please try again later",Toast.LENGTH_LONG).show();
+                    }
+
+                        showProgress(false);
+
+
                 }
             });
 
@@ -374,7 +402,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mNameView.setAdapter(adapter);
+        //mNameView.setAdapter(adapter);
     }
 
 
@@ -391,7 +419,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
-     */
+   /*  *//*
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
@@ -432,5 +460,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+    */
 }
 

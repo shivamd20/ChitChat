@@ -78,7 +78,7 @@
                     android:layout_height="100dp"
                     app:srcCompat="@drawable/welcome" />
 
-                <android.support.design.widget.TextInputLayout
+                <!--android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -90,7 +90,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1" />
 
-                </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout-->
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
