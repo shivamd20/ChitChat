@@ -5,21 +5,20 @@ import android.content.res.Configuration;
 import android.widget.Toast;
 
 
-import org.greenrobot.greendao.database.Database;
 
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.ProjectConfig;
 import io.hasura.sdk.exception.HasuraInitException;
-import io.hasura.shivam.chitchat.db.DaoMaster;
-import io.hasura.shivam.chitchat.db.DaoSession;
 
-public class CustApplication extends Application {
+public class CustApplication extends com.activeandroid.app.Application {
 
     // Called when the application is starting, before any other application objects have been created.
     // Overriding this method is totally optional!
 
+//
+//    DaoSession daoSession;
 
-    DaoSession daoSession;
+    boolean Encrypted=true;
 
 
     //TODO  protected AbstractDaoSession daoSession;
@@ -42,21 +41,15 @@ public class CustApplication extends Application {
         } catch (HasuraInitException hie) {
             Toast.makeText(this, hie.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
-
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "chitchat-db"); //The users-db here is the name of our database.
-        Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
-
-        ///// Using the below lines of code we can toggle ENCRYPTED to true or false in other to use either an encrypted database or not.
-//      DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? "users-db-encrypted" : "users-db");
-//      Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
-//      daoSession = new DaoMaster(db).newSession();
+//
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Encrypted ? "chitchat-db-encrypted" : "chitchat-db");
+//        Database db = Encrypted ? helper.getEncryptedWritableDb("chit-chat") : helper.getWritableDb();
+//        daoSession = new DaoMaster(db).newSession();
     }
-
-    public DaoSession getDaoSession() {
-        return daoSession;
-    }
+//
+//    public DaoSession getDaoSession() {
+//        return daoSession;
+//    }
 
 
         // Required initialization logic here!
