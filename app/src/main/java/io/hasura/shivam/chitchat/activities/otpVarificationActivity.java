@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import io.hasura.sdk.Callback;
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.HasuraUser;
@@ -37,9 +39,15 @@ public class otpVarificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp_varification);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
+
         setSupportActionBar(toolbar);
 
          user= Hasura.getClient().getUser();
+
+
+
 
         Toast.makeText(this,user.getMobile(),Toast.LENGTH_LONG).show();
 
@@ -96,27 +104,12 @@ public class otpVarificationActivity extends AppCompatActivity {
                         personDetails.setUser_id(user.getId());
 
 
-                        Hasura.getClient().useDataService()
-                                .setRequestBody(new InsertQueryPerson(personDetails))
-                                .expectResponseType(ResponseMessage.class)
-                                .enqueue(new Callback<ResponseMessage, HasuraException>() {
-                                    @Override
-                                    public void onSuccess(ResponseMessage message) {
-                                        Toast.makeText(otpVarificationActivity.this.getApplicationContext(),"row affected"+ message.getRowsAffected(), Toast.LENGTH_LONG).show();
-                                        Person person = new Person(user.getMobile() + ":me", null);
-
-                                        person.save();
-                                    }
-
-                                    @Override
-                                    public void onFailure(HasuraException e) {
-
-                                        Toast.makeText(otpVarificationActivity.this, "error "+e.getMessage(), Toast.LENGTH_LONG).show();
 
 
-                                        Log.e("insert query",e.toString());
-                                    }
-                                });
+
+                        Gson gson=new Gson();
+
+                       Log.e( "json",gson.toJson(new SelectQueryPerson(100)).toString());
 
                       //  finish();
 

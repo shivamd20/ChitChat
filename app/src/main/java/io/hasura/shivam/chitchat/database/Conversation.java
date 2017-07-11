@@ -13,26 +13,26 @@ import java.sql.Date;
 @Table(name = "conversation")
 public class Conversation extends Model {
 
-    @Column(name = "time-date")
-    public Date date;
+    @Column(name = "time_date")
+    private Date date;
 
     @Column(name = "message", notNull = true)
-    public String message;
+    private String message;
 
     @Column(name = "isMe", notNull = true)
-    public boolean isMe;
+    private boolean isMe;
 
     @Column(name = "isDraw", notNull = true)
-    public boolean isDraw;
+    private boolean isDraw;
 
     @Column(name = "isDelivered", notNull = true)
-    public boolean isDelivered;
+    private boolean isDelivered;
 
     @Column(name = "person", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
-    public Person with;
+    private Person with;
 
     @Column(name = "isSent",notNull = true)
-    boolean isSent;
+    private boolean isSent;
 
     public Conversation(){
         super();

@@ -2,6 +2,7 @@ package io.hasura.shivam.chitchat;
 
 import android.app.Application;
 import android.content.res.Configuration;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -28,11 +29,12 @@ public class CustApplication extends com.activeandroid.app.Application {
 
 
         try {
+
             Hasura.setProjectConfig(new ProjectConfig.Builder()
                     //.setProjectName("projectName") // or it can be .setCustomBaseDomain("somthing.com")
                     .setCustomBaseDomain("shivam.hasura.me")
                     .enableOverHttp() // if not included, then https by default
-                    .setDefaultRole("customDefaultRole") // if not included then "user" role is used by default
+                    .setDefaultRole("user") // if not included then "user" role is used by default
                     .setApiVersion(2) //if not included v1 is used by default
                     .build())
                     .enableLogs() // not included by default
@@ -40,6 +42,8 @@ public class CustApplication extends com.activeandroid.app.Application {
 
         } catch (HasuraInitException hie) {
             Toast.makeText(this, hie.getMessage(), Toast.LENGTH_SHORT).show();
+
+            Log.e("initialzation error",hie.toString());
         }
 //
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Encrypted ? "chitchat-db-encrypted" : "chitchat-db");

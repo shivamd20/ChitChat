@@ -28,6 +28,7 @@
     </string>
     <string name="prompt_mobile">Mobile Number</string>
     <string name="title_activity_otp_varification">OtpVarificationActivity</string>
-    <string name="varifiyotpbutton" > Verify Otp </string>
+    <string name="varifiyotpbutton"> Verify Otp </string>
     <string name="prompt_otp">Please enter your otp</string>
+    <string name="title_activity_api_testing">ApiTestingActivity</string>
 </resources>

@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -263,6 +264,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
 
                         showProgress(false);
+
+                    Log.e("login error",e.toString());
 
 
                 }
