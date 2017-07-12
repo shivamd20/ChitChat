@@ -116,11 +116,17 @@ public class otpVarificationActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onFailure(HasuraException e) {
-                                            if(e.getCode()== HasuraErrorCode.BAD_REQUEST) {
+                                            if(e.getCode()== HasuraErrorCode.BAD_REQUEST)
+                                            if(e.getMessage().contains("unique constraint")){
                                                 Toast.makeText(otpVarificationActivity.this, "Welcome to Chitchat", Toast.LENGTH_SHORT).show();
                                                 Log.e("hasura error", "user already exists"+e.toString());
                                                 Person person = new Person(user.getMobile() + ":me", null);
                                                 person.save();
+                                                finish();
+
+                                                Intent intent = new Intent(otpVarificationActivity.this, MainActivity.class);
+
+                                                startActivity(intent);
 
                                             }
                                             else

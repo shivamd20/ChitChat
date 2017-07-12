@@ -16,6 +16,8 @@ public class Person extends Model {
     @Column(name = "mobile", unique = true,notNull = true)
     public String mobile;
 
+@Column(name="name")
+public String name;
 
     @Column(name = "profile_pic")
     public byte[] profile_pic;

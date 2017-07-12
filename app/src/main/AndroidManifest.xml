@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.hasura.shivam.chitchat">
 
+
+
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,7 +27,12 @@
             android:value="ChitChat.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="2" />
+
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="io.hasura.shivam.chitchat.database.Person, io.hasura.shivam.chitchat.database.Conversation" />
+
 
         <activity
             android:name=".activities.ChatActivity"
