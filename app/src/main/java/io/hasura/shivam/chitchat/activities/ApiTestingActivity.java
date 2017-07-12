@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import io.hasura.sdk.Callback;
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.HasuraUser;
@@ -82,11 +84,11 @@ public class ApiTestingActivity extends AppCompatActivity {
 
                     Hasura.getClient().asRole("admin").useDataService()
                             .setRequestBody(jsonObject)
-                            .expectResponseType(PersonDetails.class)
-                            .enqueue(new Callback<PersonDetails, HasuraException>() {
+                            .expectResponseTypeArrayOf(PersonDetails.class)
+                            .enqueue(new Callback<List<PersonDetails>, HasuraException>() {
                                 @Override
-                                public void onSuccess(PersonDetails message) {
-                                    Toast.makeText(ApiTestingActivity.this.getApplicationContext(), "row affected" + message.getMobile(), Toast.LENGTH_LONG).show();
+                                public void onSuccess(List<PersonDetails> message) {
+                                    Toast.makeText(ApiTestingActivity.this.getApplicationContext(), "row affected" + ""/*message.getMobile()*/, Toast.LENGTH_LONG).show();
                                     Person person = new Person(user.getMobile() + ":me", null);
 
                                     person.save();
