@@ -100,12 +100,8 @@ public class otpVarificationActivity extends AppCompatActivity {
 
                         PersonDetails personDetails=new PersonDetails();
 
-                        personDetails.setMobile(user.getMobile());
+                        personDetails.setMobile(Long.parseLong(user.getMobile()));
                         personDetails.setUser_id(user.getId());
-
-
-
-
 
                         Gson gson=new Gson();
 

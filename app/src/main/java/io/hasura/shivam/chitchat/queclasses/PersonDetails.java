@@ -12,7 +12,7 @@ public class PersonDetails {
     String name;
 
     @SerializedName("mobile")
-    String mobile;
+    long mobile;
     //byte[] picture;
 
     @SerializedName("user_id")
@@ -29,11 +29,11 @@ public class PersonDetails {
         this.name = name;
     }
 
-    public String getMobile() {
+    public long getMobile() {
         return mobile;
     }
 
-    public void setMobile(String mobile) {
+    public void setMobile(long mobile) {
         this.mobile = mobile;
     }
 
