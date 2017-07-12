@@ -1,6 +1,7 @@
 package io.hasura.shivam.chitchat;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.ProjectConfig;
 import io.hasura.sdk.exception.HasuraInitException;
+import io.hasura.shivam.chitchat.services.SyncContacts;
 
 public class CustApplication extends com.activeandroid.app.Application {
 
@@ -26,6 +28,8 @@ public class CustApplication extends com.activeandroid.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Intent intent=new Intent(this.getApplicationContext(), SyncContacts.class);
 
 
         try {
@@ -45,7 +49,8 @@ public class CustApplication extends com.activeandroid.app.Application {
 
             Log.e("initialzation error",hie.toString());
         }
-//
+
+        startService(intent);
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Encrypted ? "chitchat-db-encrypted" : "chitchat-db");
 //        Database db = Encrypted ? helper.getEncryptedWritableDb("chit-chat") : helper.getWritableDb();
 //        daoSession = new DaoMaster(db).newSession();

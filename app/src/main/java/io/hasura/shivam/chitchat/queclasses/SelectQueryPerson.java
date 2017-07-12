@@ -24,6 +24,9 @@ public class SelectQueryPerson {
     class Where{
         @SerializedName("user_id")
         Integer userId;
+
+        @SerializedName("mobile")
+        Integer mobile;
     }
 
     public SelectQueryPerson(Integer userId){
