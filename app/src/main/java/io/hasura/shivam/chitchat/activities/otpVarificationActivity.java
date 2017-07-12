@@ -13,8 +13,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
 import io.hasura.sdk.Callback;
 import io.hasura.sdk.Hasura;
+import io.hasura.sdk.HasuraErrorCode;
 import io.hasura.sdk.HasuraUser;
 import io.hasura.sdk.exception.HasuraException;
 import io.hasura.sdk.responseListener.AuthResponseListener;
@@ -39,17 +44,8 @@ public class otpVarificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp_varification);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
-
         setSupportActionBar(toolbar);
-
          user= Hasura.getClient().getUser();
-
-
-
-
-        Toast.makeText(this,user.getMobile(),Toast.LENGTH_LONG).show();
 
        submitotp=(Button)findViewById(R.id.varify_otp_button);
         otpTxt=(EditText) findViewById(R.id.otp);
@@ -89,10 +85,6 @@ public class otpVarificationActivity extends AppCompatActivity {
 
                         Toast.makeText(otpVarificationActivity.this, s, Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(otpVarificationActivity.this, MainActivity.class);
-
-                        startActivity(intent);
-
                         android.app.AlertDialog progressDialog = new ProgressDialog.Builder(otpVarificationActivity.this)
                                 .setTitle("Just a moment... We are setting few things")
                                 .setMessage("wont take long").create();
@@ -103,15 +95,43 @@ public class otpVarificationActivity extends AppCompatActivity {
                         personDetails.setMobile(Long.parseLong(user.getMobile()));
                         personDetails.setUser_id(user.getId());
 
-                        Gson gson=new Gson();
 
-                       Log.e( "json",gson.toJson(new SelectQueryPerson(100)).toString());
+                            Hasura.getClient().asRole("user").useDataService()
+                                    .setRequestBody(new InsertQueryPerson(personDetails))
+                                    .expectResponseType(ResponseMessage.class)
+                                    .enqueue(new Callback<ResponseMessage, HasuraException>() {
+                                        @Override
+                                        public void onSuccess(ResponseMessage message) {
+                                            Toast.makeText(otpVarificationActivity.this.getApplicationContext(), "row affected" + message.getRowsAffected(), Toast.LENGTH_LONG).show();
 
-                      //  finish();
+                                            Person person = new Person(user.getMobile() + ":me", null);
+                                            person.save();
+
+                                            finish();
+
+                                            Intent intent = new Intent(otpVarificationActivity.this, MainActivity.class);
+
+                                            startActivity(intent);
+                                        }
+
+                                        @Override
+                                        public void onFailure(HasuraException e) {
+                                            if(e.getCode()== HasuraErrorCode.BAD_REQUEST) {
+                                                Toast.makeText(otpVarificationActivity.this, "Welcome to Chitchat", Toast.LENGTH_SHORT).show();
+                                                Log.e("hasura error", "user already exists"+e.toString());
+                                                Person person = new Person(user.getMobile() + ":me", null);
+                                                person.save();
+
+                                            }
+                                            else
+                                            {
+                                                Log.e("hasura error",e.toString());
+                                            }
+                                        }
+                                    });
+
 
                         progressDialog.dismiss();
-
-
                     }
 
                     @Override

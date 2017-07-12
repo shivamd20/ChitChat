@@ -37,29 +37,6 @@ public class ApiTestingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        user.setUsername("admin");
-        user.setPassword("HeYmos53");
-
-
-      //  user.setAuthToken("bnsmjm84z7e62njxtf8qyjbjsv9k382f");
-       // user.setRoles(new String[]{"admin"});
-
-        user.login(new AuthResponseListener() {
-            @Override
-            public void onSuccess(String s) {
-                Toast.makeText(ApiTestingActivity.this,""+s,Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(HasuraException e) {
-                Toast.makeText(ApiTestingActivity.this,""+e.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,25 +47,25 @@ public class ApiTestingActivity extends AppCompatActivity {
 
 
                 try {
-              //  new JSONObject(new SelectQueryPerson(100)).toString();
+                    //  new JSONObject(new SelectQueryPerson(100)).toString();
+//
+//                    JSONObject jsonObject=new JSONObject("  {\"type\":\"select\"," +
+//                            " \"args\":{" +
+//                            "\"table\":\"person\", \"columns\":[\"*\"]" +
+//                            "}" +
+//                            "}");
 
-                    JSONObject jsonObject=new JSONObject("  {\"type\":\"select\"," +
-                            " \"args\":{" +
-                            "\"table\":\"person\", \"columns\":[\"*\"]" +
-                            "}" +
-                            "}");
-
-                    Log.e("json",jsonObject.toString());
+                   // Log.e("json",jsonObject.toString());
 
 
 
-                    Hasura.getClient().asRole("admin").useDataService()
-                            .setRequestBody(jsonObject)
+                    Hasura.getClient().asRole("user").useDataService()
+                            .setRequestBody(new SelectQueryPerson(100))
                             .expectResponseTypeArrayOf(PersonDetails.class)
                             .enqueue(new Callback<List<PersonDetails>, HasuraException>() {
                                 @Override
                                 public void onSuccess(List<PersonDetails> message) {
-                                    Toast.makeText(ApiTestingActivity.this.getApplicationContext(), "row affected" + ""/*message.getMobile()*/, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ApiTestingActivity.this.getApplicationContext(), "row affected" + message.size()/*message.getMobile()*/, Toast.LENGTH_LONG).show();
                                     Person person = new Person(user.getMobile() + ":me", null);
 
                                     person.save();

@@ -35,7 +35,7 @@ public class CustApplication extends com.activeandroid.app.Application {
                     .setCustomBaseDomain("shivam.hasura.me")
                     .enableOverHttp() // if not included, then https by default
                     .setDefaultRole("user") // if not included then "user" role is used by default
-                    .setApiVersion(2) //if not included v1 is used by default
+                 //   .setApiVersion(2) //if not included v1 is used by default
                     .build())
                     .enableLogs() // not included by default
                     .initialise(this);
