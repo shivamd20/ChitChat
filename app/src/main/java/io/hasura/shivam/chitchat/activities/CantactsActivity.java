@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -66,8 +67,17 @@ public class CantactsActivity extends AppCompatActivity {
         protected void onPostExecute(List<Person> persons) {
             super.onPostExecute(persons);
 
+            for (Person p:persons)
+            {
+                Log.i("Person in DB",p.mobile);
+            }
+
+            Log.i("Person in DB",persons.size()+"");
+
+
             mAdapter=new ContactsRVAdapter(persons);
 
+            mRecyclerView.setAdapter(mAdapter);
 
 
         }
@@ -75,8 +85,7 @@ public class CantactsActivity extends AppCompatActivity {
         @Override
         protected List<Person> doInBackground(Void... params) {
 
-            return  new Select().from(Person.class).execute();
-
+            return  new Select("*").from(Person.class).orderBy("RANDOM()").execute();
 
         }
     }

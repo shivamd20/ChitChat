@@ -120,7 +120,8 @@ public class otpVarificationActivity extends AppCompatActivity {
                                             if(e.getMessage().contains("unique constraint")){
                                                 Toast.makeText(otpVarificationActivity.this, "Welcome to Chitchat", Toast.LENGTH_SHORT).show();
                                                 Log.e("hasura error", "user already exists"+e.toString());
-                                                Person person = new Person(user.getMobile() + ":me", null);
+                                                Person person = new Person(user.getMobile() , null);
+                                                person.name=":me:";
                                                 person.save();
                                                 finish();
 

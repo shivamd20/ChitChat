@@ -29,7 +29,7 @@ public class ContactsRVAdapter extends RecyclerView.Adapter<ContactsRVAdapter.Vi
     public ContactsRVAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         // create a new view
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        View v =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.contact_list_viewholder, parent, false);
         // set the view's size, margins, paddings and layout parameters
        // ...

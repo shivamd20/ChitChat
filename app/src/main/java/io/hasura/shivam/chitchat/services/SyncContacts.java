@@ -183,31 +183,37 @@ public class SyncContacts extends IntentService {
                                             Person person=  new Select()
                                                     .from(Person.class)
                                                     .where("mobile = ?", p.getMobile()+"")
-                                                    .orderBy("RANDOM()")
                                                     .executeSingle();
 
                                             try {
-                                                if(person.mobile==null) {
+                                                if(person==null) {
                                                     person = new Person();
                                                     if (p.getProfile_pic() != null)
                                                         person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
                                                     person.mobile = p.getMobile() + "";
 
 
-                                                    if (person.save() == -1) {
-                                                        Log.e("not saved", person.mobile);
+                                                    long row;
+                                                    if ((row=person.save()) == -1) {
+                                                        Log.e("not saved", "not duplicate"+person.mobile);
+                                                    }
+                                                    else
+                                                    {
+                                                        Log.i("saved",row+"   mob"+person.mobile);
                                                     }
                                                 }
                                                 else
                                                 {
+                                                    Log.i("person","is not null");
+
                                                     if (p.getProfile_pic() != null)
                                                         person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
                                                     if (person.save() == -1) {
-                                                        Log.i("not saved", person.mobile);
+                                                        Log.i("not saved duplicate", person.mobile);
                                                     }
                                                 }
                                             }
-                                            catch (Exception sq)
+                                            catch (SQLiteConstraintException sq)
                                             {
                                                 Log.e("not saved", p.getMobile()+"  duplicate"+sq.toString());
                                             }
