@@ -31,4 +31,5 @@
     <string name="varifiyotpbutton"> Verify Otp </string>
     <string name="prompt_otp">Please enter your otp</string>
     <string name="title_activity_api_testing">ApiTestingActivity</string>
+    <string name="title_activity_cantacts">CantactsActivity</string>
 </resources>

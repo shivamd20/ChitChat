@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.hasura.shivam.chitchat">
 
-
-
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,11 +25,9 @@
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="2" />
-
         <meta-data
             android:name="AA_MODELS"
             android:value="io.hasura.shivam.chitchat.database.Person, io.hasura.shivam.chitchat.database.Conversation" />
-
 
         <activity
             android:name=".activities.ChatActivity"
@@ -44,7 +39,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,11 +50,11 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.otpVarificationActivity"
             android:label="@string/title_activity_otp_varification"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ApiTestingActivity"
             android:label="@string/title_activity_api_testing"
@@ -73,7 +69,12 @@
         <service
             android:name=".services.SyncContacts"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.CantactsActivity"
+            android:label="@string/title_activity_cantacts"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
