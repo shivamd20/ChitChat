@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.provider.ContactsContract;
@@ -38,6 +39,8 @@ public class SyncContacts extends IntentService {
 
     boolean doInstantSync=false;
     int waitFor =5000;
+
+    String TAG="SYNC CONTACTS";
 
 
     @Override
@@ -76,7 +79,7 @@ public class SyncContacts extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
 
         try {
-            Log.e("Sync Started","Handle intent caled");
+            Log.e(TAG,"Handle intent caled");
             while (true) {
                 ArrayList<String[]> alContacts;
 
@@ -113,7 +116,7 @@ public class SyncContacts extends IntentService {
                                     }
                                     catch (NumberFormatException ne)
                                     {
-                                        Log.e("number form",ne.toString());
+                                        Log.e(TAG,ne.toString());
                                     }
                                 }
 
@@ -165,7 +168,7 @@ public class SyncContacts extends IntentService {
                         jsonObject.put("args",args);
 
 
-                        Log.i("json",jsonObject.toString());
+                        Log.i(TAG,jsonObject.toString());
 
                         Hasura.getClient().asRole("user").useDataService()
                                 .setRequestBody(jsonObject)
@@ -174,19 +177,19 @@ public class SyncContacts extends IntentService {
                                     @Override
                                     public void onSuccess(List<PersonDetails> message) {
                                         //TODO add all to local database
-                                        Log.e("sync resu", message.size() + "");
+                                        Log.e(TAG, message.size() + "");
 
-                                        ActiveAndroid.beginTransaction();
+                                    //    ActiveAndroid.beginTransaction();
                                         for(PersonDetails p:message)
                                         {
                                             //Thread.sleep(waitFor);
-                                            Person person=  new Select()
-                                                    .from(Person.class)
-                                                    .where("mobile = ?", p.getMobile()+"")
-                                                    .executeSingle();
+//                                            Person person=  new Select()
+//                                                    .from(Person.class)
+//                                                    .where("mobile = ?", p.getMobile()+"")
+//                                                    .executeSingle();
 
                                             try {
-                                                if(person==null) {
+                                           /*     if(person==null) {
                                                     person = new Person();
                                                     if (p.getProfile_pic() != null)
                                                         person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
@@ -195,43 +198,54 @@ public class SyncContacts extends IntentService {
 
                                                     long row;
                                                     if ((row=person.save()) == -1) {
-                                                        Log.e("not saved", "not duplicate"+person.mobile);
+                                                        Log.e(TAG, "not duplicate"+person.mobile);
                                                     }
                                                     else
                                                     {
-                                                        Log.i("saved",row+"   mob"+person.mobile);
+                                                        Log.i(TAG,row+" saved  mob"+person.mobile);
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    Log.i("person","is not null");
+                                                    Log.i(TAG,"is not null");
 
                                                     if (p.getProfile_pic() != null)
                                                         person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
                                                     if (person.save() == -1) {
-                                                        Log.i("not saved duplicate", person.mobile);
+                                                        Log.i(TAG, person.mobile);
                                                     }
-                                                }
+                                                }*/
+
+
+                                           Person per=new Person();
+
+                                                per.mobile=p.getMobile()+"";
+
+                                                per.name=getContactName(getApplicationContext(),per.mobile);
+
+                                               // per.profile_pic=p.getProfile_pic();
+
+                                                per.save();
                                             }
                                             catch (SQLiteConstraintException sq)
                                             {
-                                                Log.e("not saved", p.getMobile()+"  duplicate"+sq.toString());
+                                                Log.e(TAG, p.getMobile()+"  duplicate"+sq.toString());
                                             }
                                         }
-                                        ActiveAndroid.endTransaction();
+                                     //   ActiveAndroid.endTransaction();
 
-                                        Log.e("Synced","Contact Synced");
+                                        Log.e(TAG,"Contact Synced");
                                     }
 
                                     @Override
                                     public void onFailure(HasuraException e) {
-                                        Log.e("select query", e.getCode() + " <-code   " + e.toString());
+                                        Log.e(TAG, e.getCode() + " <-code   " + e.toString());
                                     }
                                 });
                     }
                     catch (JSONException je)
                     {
-                        Log.e("json error",je.toString());
+                        Log.e(TAG,je.toString());
                     }
 
                     if(doInstantSync) {
@@ -241,14 +255,51 @@ public class SyncContacts extends IntentService {
                 }
 
                 Thread.sleep(waitFor);
+
+
+
+                List<Person> persons=  new Select()
+                        .from(Person.class)
+                      //  .where("mobile = ?", p.getMobile()+"")
+                        .execute();
+
+                for(Person p:persons)
+                {
+                    Log.i(TAG,"datavase daata    "+p.mobile);
+                }
             }
         }
         catch (/*Interrupted*/Exception ie)
         {
-            Log.e("intrupt",ie.toString());
+            Log.e(TAG,ie.toString());
         }
 
         return ;
+    }
+
+    public static String getContactName(Context context, String number) {
+
+        String name = null;
+
+        // define the columns I want the query to return
+        String[] projection = new String[] {
+                ContactsContract.PhoneLookup.DISPLAY_NAME,
+                ContactsContract.PhoneLookup._ID};
+
+        // encode the phone number and build the filter URI
+        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        // query time
+        Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
+
+        if(cursor != null) {
+            if (cursor.moveToFirst()) {
+                name =      cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+            } else {
+            }
+            cursor.close();
+        }
+        return name;
     }
 
 

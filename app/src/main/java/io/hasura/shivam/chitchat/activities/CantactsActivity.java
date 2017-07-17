@@ -1,8 +1,12 @@
 package io.hasura.shivam.chitchat.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +25,11 @@ import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.contacts.ContactsRVAdapter;
 import io.hasura.shivam.chitchat.database.DBContract;
 import io.hasura.shivam.chitchat.database.Person;
+import io.hasura.shivam.chitchat.services.SyncContacts;
 
 public class CantactsActivity extends AppCompatActivity {
+
+    String TAG="CONTACTSACTIVITY";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -85,9 +92,23 @@ public class CantactsActivity extends AppCompatActivity {
         @Override
         protected List<Person> doInBackground(Void... params) {
 
-            return  new Select("*").from(Person.class).orderBy("RANDOM()").execute();
+            List<Person> list= new Select("*").from(Person.class).orderBy("RANDOM()").execute();
+
+            for(Person p:list)
+            {
+                p.name= SyncContacts.getContactName(CantactsActivity.this,p.mobile);
+
+                if(p.name==null)
+                {
+                    p.name=p.mobile;
+                }
+            }
+
+            return list;
 
         }
+
+
     }
 
 }

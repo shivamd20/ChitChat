@@ -14,25 +14,25 @@ import java.sql.Date;
 public class Conversation extends Model {
 
     @Column(name = "time_date")
-    private Date date;
+    public Date date;
 
     @Column(name = "message", notNull = true)
-    private String message;
+    public String message;
 
     @Column(name = "isMe", notNull = true)
-    private boolean isMe;
+   public   boolean isMe;
 
     @Column(name = "isDraw", notNull = true)
-    private boolean isDraw;
+    public boolean isDraw;
 
     @Column(name = "isDelivered", notNull = true)
-    private boolean isDelivered;
+    public boolean isDelivered;
 
     @Column(name = "person", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
-    private Person with;
+    public Person with;
 
     @Column(name = "isSent",notNull = true)
-    private boolean isSent;
+    public boolean isSent;
 
     public Conversation(){
         super();

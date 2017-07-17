@@ -1,22 +1,29 @@
 package io.hasura.shivam.chitchat.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import io.hasura.sdk.Hasura;
 import io.hasura.shivam.chitchat.R;
+import io.hasura.shivam.chitchat.database.Conversation;
 
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
 
         MenuInflater menuInflater=getMenuInflater();
 
@@ -62,4 +69,19 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    class LoadRecentsFromDatabase extends AsyncTask<Void,Void,List<Conversation>>{
+
+        @Override
+        protected void onPostExecute(List<Conversation> conversations) {
+            super.onPostExecute(conversations);
+        }
+
+        @Override
+        protected List<Conversation> doInBackground(Void... params) {
+            return null;
+        }
+    }
 }
+
+

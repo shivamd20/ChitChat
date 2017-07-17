@@ -39,7 +39,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity"
+        <activity
+            android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,7 +75,11 @@
         <activity
             android:name=".activities.CantactsActivity"
             android:label="@string/title_activity_cantacts"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".services.FetchMesseges"
+            android:exported="false"></service>
     </application>
 
 </manifest>
