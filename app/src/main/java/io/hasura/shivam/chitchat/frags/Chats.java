@@ -1,14 +1,18 @@
 package io.hasura.shivam.chitchat.frags;
 
         import java.util.ArrayList;
+        import java.util.Calendar;
+        import java.util.List;
         import java.util.Random;
 
         import android.annotation.TargetApi;
-        import android.content.Context;
+        import android.database.DataSetObserver;
         import android.graphics.Canvas;
         import android.graphics.drawable.BitmapDrawable;
+        import android.os.AsyncTask;
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.View.OnClickListener;
@@ -17,23 +21,30 @@ package io.hasura.shivam.chitchat.frags;
         import android.widget.ImageButton;
         import android.widget.ListView;
 
+        import com.activeandroid.query.Select;
         import com.android.graphics.CanvasView;
 
         import io.hasura.shivam.chitchat.R;
+        import io.hasura.shivam.chitchat.activities.ChatActivity;
+        import io.hasura.shivam.chitchat.database.Conversation;
+        import io.hasura.shivam.chitchat.database.Person;
         import io.hasura.shivam.chitchat.frags.mChat.ChatAdapter;
-        import io.hasura.shivam.chitchat.frags.mChat.ChatMessage;
-        import io.hasura.shivam.chitchat.frags.mChat.CommonMethods;
 
 
 public class Chats extends Fragment implements OnClickListener {
 
     private EditText msg_edittext;
-    private String user1 = "khushi", user2 = "khushi1";
+    public long me,with;
+
+    boolean isCancel=false;
+
     private Random random;
-    public static ArrayList<ChatMessage> chatlist;
+
     public static ChatAdapter chatAdapter;
     ListView msgListView;
     CanvasView canvasView;
+
+    GetMesseges getMesseges;
 
 
     @Override
@@ -50,15 +61,29 @@ public class Chats extends Fragment implements OnClickListener {
         sendButton.setOnClickListener(this);
 
         // ----Set autoscroll of listview when a new message arrives----//
-        msgListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        msgListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         msgListView.setStackFromBottom(true);
 
-        chatlist = new ArrayList<ChatMessage>();
-        chatAdapter = new ChatAdapter(getActivity(), chatlist);
-        msgListView.setAdapter(chatAdapter);
 
         drawBackground();
 
+        with= ((ChatActivity )this.getActivity()).with;
+        me=((ChatActivity)this.getActivity()).me;
+
+
+
+        Log.e("with",(with)+"");
+
+
+        List<Conversation> list=new ArrayList<>();
+
+        chatAdapter=new ChatAdapter(this.getActivity(),list);
+
+        msgListView.setAdapter(chatAdapter);
+
+
+         getMesseges=new GetMesseges();
+        getMesseges.execute();
         return view;
     }
 
@@ -83,15 +108,26 @@ public class Chats extends Fragment implements OnClickListener {
     public void sendTextMessage(View v) {
         String message = msg_edittext.getEditableText().toString();
         if (!message.equalsIgnoreCase("")) {
-            final ChatMessage chatMessage = new ChatMessage(user1, user2,
-                    message, "" + random.nextInt(1000), false);
-            chatMessage.setMsgID();
-            chatMessage.body = message;
-            chatMessage.Date = CommonMethods.getCurrentDate();
-            chatMessage.Time = CommonMethods.getCurrentTime();
-            msg_edittext.setText("");
-            chatAdapter.add(chatMessage);
+
+            Conversation conversation=new Conversation();
+
+            conversation.isMe=true;
+            conversation.date= Calendar.getInstance().getTime();
+
+           Person with=new Select().from(Person.class).where("id="+this.with).executeSingle();
+
+            conversation.with=with;
+            conversation.message=message;
+            conversation.isSent=false;
+            conversation.isDraw=false;
+            conversation.isDelivered=false;
+            conversation.isMe=true;
+            conversation.save();
+            chatAdapter.add(conversation);
             chatAdapter.notifyDataSetChanged();
+            msg_edittext.setText("");
+
+           // msgListView.scrollTo();
         }
     }
 
@@ -101,6 +137,90 @@ public class Chats extends Fragment implements OnClickListener {
             case R.id.sendMessageButton:
                 sendTextMessage(v);
 
+        }
+
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        isCancel=true;
+
+         getMesseges.cancel(true);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        isCancel=false;
+
+        getMesseges=new GetMesseges();
+
+        getMesseges.execute();
+    }
+
+     class GetMesseges extends AsyncTask<Void,List<Conversation>,Void>{
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.i("preExecute",with+"");
+
+            List<Conversation> list=new  Select().from(Conversation.class).execute();
+
+            for(Conversation x:list)
+            {
+                Log.i("conversation",x.message+"  "+x.with+"  "+x.msg_id+"  "+x.date+"  "+x.isDelivered+"  isme "+x.isMe+" issent  "+x.isSent);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(List<Conversation> ...values) {
+            super.onProgressUpdate(values);
+
+            chatAdapter.clear();
+            
+            int i=-1;
+            for (Conversation x:values[0]) {
+                i++;
+                chatAdapter.add(x);
+                Log.i("each msg",x.with.user_id+"");
+            }
+                    chatAdapter.notifyDataSetChanged();
+        }
+
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            while (!isCancel) {
+
+                List<Conversation> conversations = new Select().from(Conversation.class).where("with="+with)
+                        .execute();
+
+                publishProgress(conversations);
+
+                try {
+                    Thread.sleep(3000);
+
+                }catch (InterruptedException ie)
+                {
+                    Log.e("CHat Activity",""+ie);
+                }
+            }
+
+            return null;
         }
     }
 
