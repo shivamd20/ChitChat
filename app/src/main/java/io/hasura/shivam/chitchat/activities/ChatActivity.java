@@ -9,10 +9,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.activeandroid.query.Select;
+
+import io.hasura.sdk.Hasura;
 import io.hasura.shivam.chitchat.R;
+import io.hasura.shivam.chitchat.database.Conversation;
+import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.frags.Chats;
 import io.hasura.shivam.chitchat.frags.DrawFrag;
 import io.hasura.shivam.chitchat.frags.mChat.ViewPagerRemovingSwipe;
@@ -29,6 +35,9 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    public long me,with;
+
+
     /**
      * The {@link io.hasura.shivam.chitchat.frags.mChat.ViewPagerRemovingSwipe} that will host the section contents.
      */
@@ -38,6 +47,20 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        with=getIntent().getLongExtra("with",-77);
+
+        Log.e("with",with+"");
+
+       Person per= new Select().from(Person.class).where("id="+with).executeSingle();
+
+        if(per!=null)
+
+        this.setTitle(per.name);
+
+        else
+
+            this.setTitle(with+"");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

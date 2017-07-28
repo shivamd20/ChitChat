@@ -107,6 +107,7 @@ public class otpVarificationActivity extends AppCompatActivity {
                                             Person person = new Person(user.getMobile() + ":me", null);
                                             person.save();
 
+
                                             finish();
 
                                             Intent intent = new Intent(otpVarificationActivity.this, MainActivity.class);

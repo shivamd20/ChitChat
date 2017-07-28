@@ -38,7 +38,9 @@ import io.hasura.shivam.chitchat.queclasses.SelectQueryPerson;
 public class SyncContacts extends IntentService {
 
     boolean doInstantSync=false;
-    int waitFor =5000;
+    int waitFor =1000;
+
+    boolean responseArrived=false;
 
     String TAG="SYNC CONTACTS";
 
@@ -81,6 +83,8 @@ public class SyncContacts extends IntentService {
         try {
             Log.e(TAG,"Handle intent caled");
             while (true) {
+
+
                 ArrayList<String[]> alContacts;
 
                 ContentResolver cr = mContext.getContentResolver(); //Activity/Application android.content.Context
@@ -176,6 +180,8 @@ public class SyncContacts extends IntentService {
                                 .enqueue(new Callback<List<PersonDetails>, HasuraException>() {
                                     @Override
                                     public void onSuccess(List<PersonDetails> message) {
+
+                                        responseArrived=true;
                                         //TODO add all to local database
                                         Log.e(TAG, message.size() + "");
 
@@ -217,11 +223,20 @@ public class SyncContacts extends IntentService {
                                                 }*/
 
 
-                                           Person per=new Person();
+                                           Person per;
+
+                                                per=new Select().from(Person.class).where("mobile="+p.getMobile()).executeSingle();
+
+                                                if(per==null)
+                                                {
+                                                    per=new Person();
+                                                }
 
                                                 per.mobile=p.getMobile()+"";
 
                                                 per.name=getContactName(getApplicationContext(),per.mobile);
+
+                                                per.user_id=p.getUser_id();
 
                                                // per.profile_pic=p.getProfile_pic();
 
@@ -234,11 +249,12 @@ public class SyncContacts extends IntentService {
                                         }
                                      //   ActiveAndroid.endTransaction();
 
-                                        Log.e(TAG,"Contact Synced");
+                                        Log.e(TAG,"Contact Synced"+"    "+message.size());
                                     }
 
                                     @Override
                                     public void onFailure(HasuraException e) {
+                                        responseArrived=true;
                                         Log.e(TAG, e.getCode() + " <-code   " + e.toString());
                                     }
                                 });
@@ -247,6 +263,13 @@ public class SyncContacts extends IntentService {
                     {
                         Log.e(TAG,je.toString());
                     }
+
+                    while(!responseArrived) {
+
+                        Thread.sleep(waitFor);
+                    }
+
+                    responseArrived=false;
 
                     if(doInstantSync) {
                         //   doInstantSync=false;
@@ -258,15 +281,7 @@ public class SyncContacts extends IntentService {
 
 
 
-                List<Person> persons=  new Select()
-                        .from(Person.class)
-                      //  .where("mobile = ?", p.getMobile()+"")
-                        .execute();
 
-                for(Person p:persons)
-                {
-                    Log.i(TAG,"datavase daata    "+p.mobile);
-                }
             }
         }
         catch (/*Interrupted*/Exception ie)

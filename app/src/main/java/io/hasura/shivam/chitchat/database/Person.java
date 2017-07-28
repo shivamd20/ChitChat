@@ -8,16 +8,20 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.io.Serializable;
 
 
 @Table(name = "Person")
-public class Person extends Model {
+public class Person extends Model implements Serializable {
 
     @Column(name = "mobile", unique = true,notNull = true)
     public String mobile;
 
-@Column(name="name")
-public String name;
+    @Column(name="name")
+    public String name;
+
+    @Column(name="user_id", unique=true, notNull=true)
+    public long user_id;
 
     @Column(name = "profile_pic")
     public byte[] profile_pic;

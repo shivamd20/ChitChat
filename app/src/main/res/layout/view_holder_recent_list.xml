@@ -47,6 +47,7 @@
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_weight="10"
                     android:backgroundTint="@android:color/darker_gray"
                     android:backgroundTintMode="src_over"
@@ -55,11 +56,13 @@
                 <TextView
                     android:id="@+id/mobile_view_contact"
                     android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_weight="70"
                     android:text="TextView" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/time_recent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="20"
                     android:text="TextView" />

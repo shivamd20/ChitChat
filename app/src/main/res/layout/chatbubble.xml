@@ -1,23 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/bubble_layout_parent"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/bubble_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bubble1">
+        android:background="@drawable/bubble1"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxEms="12"
             android:layout_gravity="center"
+            android:maxEms="12"
             android:text="Hi! new message"
-            android:textColor="@android:color/primary_text_light" />
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp">
+
+        <TextView
+            android:id="@+id/isSentMessege"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="TextView"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/timeMsgView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:text="TextView"
+            android:textSize="10sp" />
     </LinearLayout>
 
 </LinearLayout>

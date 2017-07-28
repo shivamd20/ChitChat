@@ -32,4 +32,8 @@
     <string name="prompt_otp">Please enter your otp</string>
     <string name="title_activity_api_testing">ApiTestingActivity</string>
     <string name="title_activity_cantacts">CantactsActivity</string>
+    <string name="facebook_app_id">1440075506106232</string>
+    <string name="fb_login_protocol_scheme">fb1440075506106232</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">acee7c356aefc84733180c00ace67905</string>
+    <string name="ak_login_protocol_scheme">akfb1440075506106232</string>
 </resources>

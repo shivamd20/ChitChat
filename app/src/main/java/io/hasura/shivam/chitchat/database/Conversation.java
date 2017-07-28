@@ -1,17 +1,26 @@
 package io.hasura.shivam.chitchat.database;
 
+import android.provider.BaseColumns;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.sql.Date;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by shivam on 3/7/17.
  */
 
 @Table(name = "conversation")
-public class Conversation extends Model {
+public class Conversation extends Model implements Serializable{
+
+
+    @Column(name = "msg_id", unique = true)
+    public Long msg_id;
+
+
 
     @Column(name = "time_date")
     public Date date;
@@ -28,7 +37,7 @@ public class Conversation extends Model {
     @Column(name = "isDelivered", notNull = true)
     public boolean isDelivered;
 
-    @Column(name = "person", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "with", notNull = true)
     public Person with;
 
     @Column(name = "isSent",notNull = true)
@@ -47,5 +56,6 @@ public class Conversation extends Model {
         this.isMe=isMe;
         this.date=date;
         this.isSent=isSent;
+
     }
 }

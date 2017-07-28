@@ -25,7 +25,8 @@ import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.contacts.ContactsRVAdapter;
 import io.hasura.shivam.chitchat.database.DBContract;
 import io.hasura.shivam.chitchat.database.Person;
-import io.hasura.shivam.chitchat.services.SyncContacts;
+
+import static io.hasura.shivam.chitchat.services.SyncContacts.getContactName;
 
 public class CantactsActivity extends AppCompatActivity {
 
@@ -81,33 +82,24 @@ public class CantactsActivity extends AppCompatActivity {
 
             Log.i("Person in DB",persons.size()+"");
 
-
             mAdapter=new ContactsRVAdapter(persons);
 
             mRecyclerView.setAdapter(mAdapter);
-
-
         }
 
         @Override
         protected List<Person> doInBackground(Void... params) {
-
             List<Person> list= new Select("*").from(Person.class).orderBy("RANDOM()").execute();
-
             for(Person p:list)
             {
-                p.name= SyncContacts.getContactName(CantactsActivity.this,p.mobile);
-
+                p.name=getContactName(CantactsActivity.this,p.mobile);
                 if(p.name==null)
                 {
                     p.name=p.mobile;
                 }
             }
-
             return list;
-
         }
-
 
     }
 
