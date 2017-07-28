@@ -217,7 +217,7 @@ public class FetchMesseges extends IntentService {
 
     }
 
-     static void sendMesseges()
+    public static void sendMesseges()
     {
 
        // ActiveAndroid.beginTransaction();
@@ -328,7 +328,7 @@ public class FetchMesseges extends IntentService {
                     fetchMesseges();
 
 
-                sendMesseges.start();
+               // sendMesseges.start();
 
 
                     if(doInstantSync) {
