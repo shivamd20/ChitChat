@@ -2,9 +2,6 @@ package io.hasura.shivam.chitchat.frags.mChat;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -63,7 +61,7 @@ public class ChatAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Conversation message = (Conversation) chatMessageList.get(position);
+        Conversation message =  chatMessageList.get(position);
         View vi = convertView;
         if (convertView == null)
             vi = inflater.inflate(R.layout.chatbubble, null);
@@ -72,15 +70,32 @@ public class ChatAdapter extends BaseAdapter {
 
         TextView isSent=(TextView)vi.findViewById(R.id.isSentMessege);
 
-        time.setText(printDifference(message.date,Calendar.getInstance().getTime()));
+
+        SimpleDateFormat sf=new SimpleDateFormat("h mm a");
+
+        time.setText(sf.format(message.date));
+
+        ImageView msgStatusView=(ImageView) vi.findViewById(R.id.msg_status_chat_screen_vh);
 
 
-        if(!message.isSent)
-        isSent.setText("sending");
-        else
-        {
-            isSent.setText("sent");
-        }
+        if(message.isMe) {
+            if (message.isDelivered) {
+
+                msgStatusView.setImageResource(R.mipmap.double_tick_30);
+
+            }
+            else if(message.isSent){
+
+                msgStatusView.setImageResource(R.mipmap.single_tick_25);
+
+
+            }
+            else
+            {
+                msgStatusView.setImageResource(R.drawable.ic_access_time_black_24dp);
+            }
+            }
+
 
 
         TextView msg = (TextView) vi.findViewById(R.id.message_text);
@@ -94,54 +109,60 @@ public class ChatAdapter extends BaseAdapter {
         if (message.isMe) {
             layout.setBackgroundResource(R.drawable.bubble2);
             parent_layout.setGravity(Gravity.RIGHT);
+
+            msgStatusView.setVisibility(View.VISIBLE);
         }
         // If not mine then align to left
-        else {
+        else
+            {
+
+                msgStatusView.setVisibility(View.GONE);
+
             layout.setBackgroundResource(R.drawable.bubble1);
             parent_layout.setGravity(Gravity.LEFT);
         }
         msg.setTextColor(Color.BLACK);
         return vi;
     }
-    public String printDifference(Date startDate, Date endDate){
-
-        StringBuilder sb=new StringBuilder();
-
-        //milliseconds
-        long different = endDate.getTime() - startDate.getTime();
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
-
-        long elapsedSeconds = different / secondsInMilli;
-
-        if(elapsedDays>1)
-        {
-            return elapsedDays+" days ago";
-        }
-        if(elapsedHours>1)
-        {
-            return  elapsedHours+" hours ago";
-        }
-        else if(elapsedMinutes>1)
-        {
-            return elapsedMinutes+" minutes ago";
-        }
-        else {
-            return elapsedSeconds+" seconds ago";
-        }
-
-    }
+//    public String printDifference(Date startDate, Date endDate){
+//
+//        StringBuilder sb=new StringBuilder();
+//
+//        //milliseconds
+//        long different = endDate.getTime() - startDate.getTime();
+//        long secondsInMilli = 1000;
+//        long minutesInMilli = secondsInMilli * 60;
+//        long hoursInMilli = minutesInMilli * 60;
+//        long daysInMilli = hoursInMilli * 24;
+//
+//        long elapsedDays = different / daysInMilli;
+//        different = different % daysInMilli;
+//
+//        long elapsedHours = different / hoursInMilli;
+//        different = different % hoursInMilli;
+//
+//        long elapsedMinutes = different / minutesInMilli;
+//        different = different % minutesInMilli;
+//
+//        long elapsedSeconds = different / secondsInMilli;
+//
+//        if(elapsedDays!=0)
+//        {
+//            return elapsedDays+" days ago";
+//        }
+//        if(elapsedHours!=0)
+//        {
+//            return  elapsedHours+" hours ago";
+//        }
+//        else if(elapsedMinutes!=0)
+//        {
+//            return elapsedMinutes+" minutes ago";
+//        }
+//        else {
+//            return "just now";
+//        }
+//
+//    }
 
 
     public void add(Conversation object) {

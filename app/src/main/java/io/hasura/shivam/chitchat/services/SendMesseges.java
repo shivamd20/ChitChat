@@ -37,7 +37,9 @@ public class SendMesseges extends IntentService {
 
     String TAG="SEND MESSEGES";
     private boolean responseArrivedSend;
-    final private long waitFor=100;
+    final private long waitFor=1000;
+
+    GetNewMessages.InsertResponse insertResponse;
 
     public SendMesseges() {
         super("SendMesseges");
@@ -73,6 +75,11 @@ public class SendMesseges extends IntentService {
         context.startService(intent);
     }
 
+    void onsendResult()
+    {
+
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -89,7 +96,7 @@ public class SendMesseges extends IntentService {
 
                 while(!(responseArrivedSend)) {
 
-                    Thread.sleep(waitFor);
+                    Thread.currentThread().sleep(waitFor);
 
                     Log.e(TAG,"waiting");
                 }
@@ -165,10 +172,12 @@ public class SendMesseges extends IntentService {
 
             Hasura.getClient().useDataService()
                     .setRequestBody(jsonObject)
-                    .expectResponseType(FetchMesseges.InsertResponse.class)
-                    .enqueue(new Callback<FetchMesseges.InsertResponse, HasuraException>() {
+                    .expectResponseType(GetNewMessages.InsertResponse.class)
+                    .enqueue(new Callback<GetNewMessages.InsertResponse, HasuraException>() {
                         @Override
-                        public void onSuccess(FetchMesseges.InsertResponse insertResponse) {
+                        public void onSuccess(GetNewMessages.InsertResponse insertResponse) {
+
+                            SendMesseges.this.insertResponse=insertResponse;
 
                             responseArrivedSend=true;
                             for(int i=0;i<insertResponse.affected_rows;i++)

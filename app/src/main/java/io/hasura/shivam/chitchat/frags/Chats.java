@@ -206,20 +206,19 @@ public class Chats extends Fragment implements OnClickListener {
         protected Void doInBackground(Void... params) {
             while (!isCancel) {
 
-                List<Conversation> conversations = new Select().from(Conversation.class).where("with="+with)
+                List<Conversation> conversations = new Select().from(Conversation.class).where("with="+with).and("isDraw=0")
                         .execute();
 
                 publishProgress(conversations);
 
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(30);
 
                 }catch (InterruptedException ie)
                 {
                     Log.e("CHat Activity",""+ie);
                 }
             }
-
             return null;
         }
     }

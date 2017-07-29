@@ -72,5 +72,25 @@ public class MessegePool {
     Date timestamp;
     boolean isDraw;
     boolean isDelivered;
+    boolean isRead;
 
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    public void setMsg_id(long msg_id) {
+        this.msg_id = msg_id;
+    }
+
+    public void setFrom(long from) {
+        this.from = from;
+    }
+
+    public void setTo(long to) {
+        this.to = to;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
 }

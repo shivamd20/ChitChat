@@ -28,7 +28,7 @@
             android:value="ChitChat.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="7" />
+            android:value="8" />
         <meta-data
             android:name="AA_MODELS"
             android:value="io.hasura.shivam.chitchat.database.Person,io.hasura.shivam.chitchat.database.Conversation" />
@@ -99,10 +99,10 @@
         </activity>
 
         <service
-            android:name=".services.FetchMesseges"
+            android:name=".services.SendMesseges"
             android:exported="false" />
         <service
-            android:name=".services.SendMesseges"
+            android:name=".services.GetNewMessages"
             android:exported="false"></service>
     </application>
 

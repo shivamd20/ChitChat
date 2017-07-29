@@ -1,11 +1,13 @@
 package io.hasura.shivam.chitchat.recent.screens;
 
+import android.graphics.drawable.Drawable;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -77,6 +79,16 @@ public class RecentRVAdapter  extends RecyclerView.Adapter<RecentRVAdapter.ViewH
         }
         holder.lastMessege.setText(mDataset.get(position).message);
         holder.timeView.setText(mDataset.get(position).date.toString().split("G")[0]);
+
+        if(mDataset.get(position).isMe) {
+            if (mDataset.get(position).isSent)
+                holder.msg_statusView.setImageResource(R.mipmap.single_tick_25);
+
+            if (mDataset.get(position).isDelivered)
+                holder.msg_statusView.setImageResource(R.mipmap.double_tick_30);
+        }
+
+      //  holder.msg_statusView.setImageResource(R.mipmap.double_tick_30);
        // holder
     }
 
@@ -90,6 +102,7 @@ public class RecentRVAdapter  extends RecyclerView.Adapter<RecentRVAdapter.ViewH
         public TextView mNameView;
         public TextView lastMessege;
         public  TextView timeView;
+        public ImageView msg_statusView;
         public ViewHolder(View v) {
             super(v);
 
@@ -98,6 +111,8 @@ public class RecentRVAdapter  extends RecyclerView.Adapter<RecentRVAdapter.ViewH
             lastMessege=(TextView) v.findViewById(R.id.mobile_view_contact);
 
             timeView=(TextView) v.findViewById(R.id.time_recent);
+
+            msg_statusView=(ImageView)v.findViewById(R.id.msg_status_recent_vh);
         }
     }
 

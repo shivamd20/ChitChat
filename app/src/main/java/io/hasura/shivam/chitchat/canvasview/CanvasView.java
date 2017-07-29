@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -26,12 +25,11 @@ import java.util.Queue;
  * This class defines fields and methods for drawing.
  */
 public class CanvasView extends View {
-
     // Enumeration for Mode
     public   enum Mode {
         DRAW,
         TEXT,
-        ERASER;
+        ERASER
     }
 
     // Enumeration for Drawer
@@ -48,8 +46,8 @@ public class CanvasView extends View {
     private Canvas canvas   = null;
     private Bitmap bitmap   = null;
 
-    private List<Path>  pathLists  = new ArrayList<Path>();
-    private List<Paint> paintLists = new ArrayList<Paint>();
+    private List<Path>  pathLists  = new ArrayList<>();
+    private List<Paint> paintLists = new ArrayList<>();
 
     private final Paint emptyPaint = new Paint();
 
@@ -72,7 +70,7 @@ public class CanvasView extends View {
     private int opacity               = 255;
     private float blur                = 0F;
     private Paint.Cap lineCap         = Paint.Cap.ROUND;
-    private PathEffect drawPathEffect = null;
+   // private PathEffect drawPathEffect = null;
 
     // for Text
     private String text           = "";
@@ -170,7 +168,7 @@ public class CanvasView extends View {
             paint.setColor(this.paintStrokeColor);
             paint.setShadowLayer(this.blur, 0F, 0F, this.paintStrokeColor);
             paint.setAlpha(this.opacity);
-            paint.setPathEffect(this.drawPathEffect);
+           // paint.setPathEffect(this.drawPathEffect);
         }
 
         return paint;
@@ -779,19 +777,19 @@ public class CanvasView extends View {
      * This method is getter for path effect of drawing.
      *
      * @return drawPathEffect
-     */
-    public PathEffect getDrawPathEffect() {
-        return drawPathEffect;
-    }
-
-    /**
-     * This method is setter for path effect of drawing.
-     *
-     * @param drawPathEffect
-     */
-    public void setDrawPathEffect(PathEffect drawPathEffect) {
-        this.drawPathEffect = drawPathEffect;
-    }
+//     */
+//    public PathEffect getDrawPathEffect() {
+//        return drawPathEffect;
+//    }
+//
+//    /**
+//     * This method is setter for path effect of drawing.
+//     *
+//     * @param drawPathEffect
+//     */
+//    public void setDrawPathEffect(PathEffect drawPathEffect) {
+//        this.drawPathEffect = drawPathEffect;
+//    }
     /**
      * This method is getter for font size,
      *

@@ -20,6 +20,8 @@ public class Conversation extends Model implements Serializable{
     @Column(name = "msg_id", unique = true)
     public Long msg_id;
 
+    @Column (name = "isRead" )
+    public boolean isRead;
 
 
     @Column(name = "time_date")

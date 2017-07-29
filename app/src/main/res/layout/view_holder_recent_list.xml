@@ -45,13 +45,12 @@
                 android:weightSum="100">
 
                 <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_height="match_parent"
+                    android:id="@+id/msg_status_recent_vh"
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="10"
                     android:backgroundTint="@android:color/darker_gray"
-                    android:backgroundTintMode="src_over"
-                    app:srcCompat="@drawable/ic_check_circle_black_24dp" />
+                    android:backgroundTintMode="src_over" />
 
                 <TextView
                     android:id="@+id/mobile_view_contact"

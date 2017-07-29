@@ -44,6 +44,8 @@ public class SyncContacts extends IntentService {
 
     String TAG="SYNC CONTACTS";
 
+    List<PersonDetails> message;
+
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
@@ -76,6 +78,76 @@ public class SyncContacts extends IntentService {
     Context mContext;
     /** The service is starting, due to a call to startService() */
 
+    void onSyncResult(){
+
+        Log.e(TAG, message.size() + "");
+
+        //    ActiveAndroid.beginTransaction();
+        for(PersonDetails p:message)
+        {
+            //Thread.sleep(waitFor);
+//                                            Person person=  new Select()
+//                                                    .from(Person.class)
+//                                                    .where("mobile = ?", p.getMobile()+"")
+//                                                    .executeSingle();
+
+            try {
+                                           /*     if(person==null) {
+                                                    person = new Person();
+                                                    if (p.getProfile_pic() != null)
+                                                        person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
+                                                    person.mobile = p.getMobile() + "";
+
+
+                                                    long row;
+                                                    if ((row=person.save()) == -1) {
+                                                        Log.e(TAG, "not duplicate"+person.mobile);
+                                                    }
+                                                    else
+                                                    {
+                                                        Log.i(TAG,row+" saved  mob"+person.mobile);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Log.i(TAG,"is not null");
+
+                                                    if (p.getProfile_pic() != null)
+                                                        person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
+                                                    if (person.save() == -1) {
+                                                        Log.i(TAG, person.mobile);
+                                                    }
+                                                }*/
+
+
+                Person per;
+
+                per=new Select().from(Person.class).where("mobile="+p.getMobile()).executeSingle();
+
+                if(per==null)
+                {
+                    per=new Person();
+                }
+
+                per.mobile=p.getMobile()+"";
+
+                per.name=getContactName(getApplicationContext(),per.mobile);
+
+                per.user_id=p.getUser_id();
+
+                // per.profile_pic=p.getProfile_pic();
+
+                per.save();
+            }
+            catch (SQLiteConstraintException sq)
+            {
+                Log.e(TAG, p.getMobile()+"  duplicate"+sq.toString());
+            }
+        }
+        //   ActiveAndroid.endTransaction();
+
+        Log.e(TAG,"Contact Synced"+"    "+message.size());
+    }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
@@ -104,7 +176,7 @@ public class SyncContacts extends IntentService {
 
                                 contactNumber= contactNumber.replace("-","");
                                 contactNumber= contactNumber.replace(" ","");
-                                if(contactNumber.length()>10) {
+                                if(contactNumber.length()>=10) {
 
                                     //   contactNumber.replace("-","");
                                     try {
@@ -181,75 +253,10 @@ public class SyncContacts extends IntentService {
                                     @Override
                                     public void onSuccess(List<PersonDetails> message) {
 
+                                        SyncContacts.this.message=message;
+
                                         responseArrived=true;
                                         //TODO add all to local database
-                                        Log.e(TAG, message.size() + "");
-
-                                    //    ActiveAndroid.beginTransaction();
-                                        for(PersonDetails p:message)
-                                        {
-                                            //Thread.sleep(waitFor);
-//                                            Person person=  new Select()
-//                                                    .from(Person.class)
-//                                                    .where("mobile = ?", p.getMobile()+"")
-//                                                    .executeSingle();
-
-                                            try {
-                                           /*     if(person==null) {
-                                                    person = new Person();
-                                                    if (p.getProfile_pic() != null)
-                                                        person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
-                                                    person.mobile = p.getMobile() + "";
-
-
-                                                    long row;
-                                                    if ((row=person.save()) == -1) {
-                                                        Log.e(TAG, "not duplicate"+person.mobile);
-                                                    }
-                                                    else
-                                                    {
-                                                        Log.i(TAG,row+" saved  mob"+person.mobile);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Log.i(TAG,"is not null");
-
-                                                    if (p.getProfile_pic() != null)
-                                                        person.profile_pic = Base64.decode(p.getProfile_pic(), Base64.URL_SAFE);
-                                                    if (person.save() == -1) {
-                                                        Log.i(TAG, person.mobile);
-                                                    }
-                                                }*/
-
-
-                                           Person per;
-
-                                                per=new Select().from(Person.class).where("mobile="+p.getMobile()).executeSingle();
-
-                                                if(per==null)
-                                                {
-                                                    per=new Person();
-                                                }
-
-                                                per.mobile=p.getMobile()+"";
-
-                                                per.name=getContactName(getApplicationContext(),per.mobile);
-
-                                                per.user_id=p.getUser_id();
-
-                                               // per.profile_pic=p.getProfile_pic();
-
-                                                per.save();
-                                            }
-                                            catch (SQLiteConstraintException sq)
-                                            {
-                                                Log.e(TAG, p.getMobile()+"  duplicate"+sq.toString());
-                                            }
-                                        }
-                                     //   ActiveAndroid.endTransaction();
-
-                                        Log.e(TAG,"Contact Synced"+"    "+message.size());
                                     }
 
                                     @Override
@@ -266,8 +273,10 @@ public class SyncContacts extends IntentService {
 
                     while(!responseArrived) {
 
-                        Thread.sleep(waitFor);
+                        Thread.currentThread().sleep(waitFor);
                     }
+
+                    onSyncResult();
 
                     responseArrived=false;
 

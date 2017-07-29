@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.contacts.ContactsRVAdapter;
+import io.hasura.shivam.chitchat.database.Conversation;
 import io.hasura.shivam.chitchat.database.DBContract;
 import io.hasura.shivam.chitchat.database.Person;
 
@@ -84,12 +86,36 @@ public class CantactsActivity extends AppCompatActivity {
 
             mAdapter=new ContactsRVAdapter(persons);
 
+            mAdapter.setmOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int itempPos=mRecyclerView.getChildLayoutPosition(v);
+                    Person per=mAdapter.getmDataset().get(itempPos);
+
+                    Intent intent=new Intent(CantactsActivity.this,ChatActivity.class);
+
+                    Log.i(TAG,"with main"+per.getId());
+
+                    intent.putExtra("with",per.getId());
+
+                    if(per.getId()!=null)
+                        startActivity(intent);
+                    else{
+                        Toast.makeText(CantactsActivity.this,"You can not talk with strangers" +
+                                "first save his phone number and refresh your contact list",Toast.LENGTH_SHORT).show();
+                    }
+
+                    CantactsActivity.this.finish();
+                }
+            });
+
             mRecyclerView.setAdapter(mAdapter);
         }
 
         @Override
         protected List<Person> doInBackground(Void... params) {
-            List<Person> list= new Select("*").from(Person.class).orderBy("RANDOM()").execute();
+            List<Person> list= new Select("*").from(Person.class).orderBy("name ASC").execute();
             for(Person p:list)
             {
                 p.name=getContactName(CantactsActivity.this,p.mobile);

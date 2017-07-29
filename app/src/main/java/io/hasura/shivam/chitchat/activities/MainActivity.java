@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
       HasuraUser haru= Hasura.getClient().getUser();
 
-        haru.setMobile("7389630407");
+        haru.setMobile("9406326735");
         haru.setPassword("123456");
 
 
@@ -153,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -164,8 +163,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         stopSync=false;
+
         loadRecentsFromDatabase=new LoadRecentsFromDatabase();
+
         loadRecentsFromDatabase.execute();
     }
 
@@ -265,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             List<Conversation> conversationList;
 
             while(!stopSync) {
-                String str = new Select("max(time_date)").from(Conversation.class).where("with is not null")
+                String str = new Select("max(time_date)").from(Conversation.class)
                         .groupBy("with").toSql();
 
                 conversationList = new Select()

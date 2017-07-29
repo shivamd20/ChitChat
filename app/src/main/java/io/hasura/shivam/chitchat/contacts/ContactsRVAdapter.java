@@ -1,5 +1,6 @@
 package io.hasura.shivam.chitchat.contacts;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,15 @@ public class ContactsRVAdapter extends RecyclerView.Adapter<ContactsRVAdapter.Vi
 
     private List<Person>  mDataset;
 
+    public List<Person> getmDataset() {
+        return mDataset;
+    }
+
+    private View.OnClickListener mOnClickListener;
+
+    public void setmOnClickListener(View.OnClickListener mOnClickListener) {
+        this.mOnClickListener = mOnClickListener;
+    }
 
     public ContactsRVAdapter(List<Person> myDataset) {
         mDataset = myDataset;
@@ -31,6 +41,9 @@ public class ContactsRVAdapter extends RecyclerView.Adapter<ContactsRVAdapter.Vi
         // create a new view
         View v =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.contact_list_viewholder, parent, false);
+
+        v.setOnClickListener(this.mOnClickListener);
+
         // set the view's size, margins, paddings and layout parameters
        // ...
         ViewHolder vh = new ViewHolder(v);
@@ -44,6 +57,8 @@ public class ContactsRVAdapter extends RecyclerView.Adapter<ContactsRVAdapter.Vi
         // - replace the contents of the view with that element
         holder.mNameView.setText(mDataset.get(position).name);
         holder.mobileView.setText(mDataset.get(position).mobile);
+
+
 
     }
 
@@ -61,6 +76,15 @@ public class ContactsRVAdapter extends RecyclerView.Adapter<ContactsRVAdapter.Vi
         public TextView mobileView;
         public ViewHolder(View v) {
             super(v);
+
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Snackbar.make(v,""+getLayoutPosition(),Snackbar.LENGTH_SHORT).show();
+//
+//                }
+//            });
 
             mNameView = (TextView) v.findViewById(R.id.name_view_contact);
 
