@@ -20,15 +20,34 @@ public class SerialzablePaint extends Paint {
     private float textSize=getTextSize();
     private int shadowColor;
     private float blur;
+    boolean antiAlias=super.isAntiAlias();
+    private Style style=super.getStyle();
+    private int color=getColor();
+    private int alpha=getAlpha();
+    private float strokeWidth=getStrokeWidth();
+    private float mitter=getStrokeMiter();
+    private Cap strokeCap=getStrokeCap();
+    private Align textAlign=getTextAlign();
+
+    void initialize()
+    {
+        setStrokeJoin(join);
+        setTextSize(textSize);
+        setShadowLayer(blur,0f,0f,shadowColor);
+        setAntiAlias(antiAlias);
+        setStyle(style);
+        setColor(color);
+        setAlpha(alpha);
+        setStrokeCap(strokeCap);
+        setStrokeMiter(mitter);
+        setTextAlign(textAlign);
+    }
 
 
     @Override
     public void setShadowLayer(float radius, float dx, float dy, int shadowColor) {
-
         this.shadowColor=shadowColor;
         this.blur=radius;
-
-
         super.setShadowLayer(radius, dx, dy, shadowColor);
     }
 
@@ -38,22 +57,12 @@ public class SerialzablePaint extends Paint {
         super.setTextSize(textSize);
     }
 
-
-
     @Override
     public void setStrokeJoin(Join join) {
         this.join=join;
         super.setStrokeJoin(join);
     }
 
-    boolean antiAlias=super.isAntiAlias();
-    private Style style=super.getStyle();
-    private int color=getColor();
-    private int alpha=getAlpha();
-    private float strokeWidth=getStrokeWidth();
-    private float mitter=getStrokeMiter();
-    private Cap strokeCap=getStrokeCap();
-    private Align textAlign=getTextAlign();
 
     @Override
     public void setAntiAlias(boolean aa) {
@@ -81,15 +90,11 @@ public class SerialzablePaint extends Paint {
         super.setAlpha(a);
     }
 
-
-
     @Override
     public void setStrokeWidth(float width) {
         this.strokeWidth=width;
         super.setStrokeWidth(width);
     }
-
-
 
     @Override
     public void setStrokeCap(Cap cap) {
@@ -97,14 +102,10 @@ public class SerialzablePaint extends Paint {
         super.setStrokeCap(cap);
     }
 
-
-
-
     @Override
     public Typeface setTypeface(Typeface typeface) {
         return super.setTypeface(typeface);
     }
-
 
     @Override
     public void setTextAlign(Align align) {

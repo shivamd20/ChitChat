@@ -23,17 +23,22 @@ import java.util.List;
  * This class defines fields and methods for drawing.
  */
 
-
-
 public class CanvasView extends View {
-    // Enumeration for Mode
+
+    interface OnDrawingChangeListener {
+       long  onDrawingAdded(SerialzablePaint paint,SerialzablePath path);
+       void onDrawingRemoved(long id);
+        void onDrawingUpdated(long id);
+    }
+
+    OnDrawingChangeListener onDrawingChangeListener;
+
     public   enum Mode {
         DRAW,
         TEXT,
         ERASER
     }
 
-    // Enumeration for Drawer
     public enum Drawer {
         PEN,
         LINE,
@@ -41,7 +46,7 @@ public class CanvasView extends View {
         CIRCLE,
         ELLIPSE,
         QUADRATIC_BEZIER,
-        QUBIC_BEZIER;
+        QUBIC_BEZIER
     }
 
     private Canvas canvas   = null;
@@ -50,21 +55,26 @@ public class CanvasView extends View {
     private class History implements Serializable{
          List<SerialzablePath>  pathLists  = new ArrayList<>();
          List<SerialzablePaint> paintLists = new ArrayList<>();
+         List<Long> idList=new ArrayList<>();
 
         void add(SerialzablePath path,SerialzablePaint paint)
         {
+            long id=onDrawingChangeListener.onDrawingAdded(paint,path);
+            idList.add(id);
             pathLists.add(path);
             paintLists.add(paint);
         }
 
         void set(int i,SerialzablePath path,SerialzablePaint paint)
         {
+            onDrawingChangeListener.onDrawingUpdated(idList.get(i));
             pathLists.set(i,path);
             paintLists.set(i,paint);
         }
 
         void remove(int i)
         {
+            onDrawingChangeListener.onDrawingRemoved(i);
             paintLists.remove(i);
             pathLists.remove(i);
         }
@@ -87,6 +97,7 @@ public class CanvasView extends View {
     History history=new History();
 
     private final SerialzablePaint emptyPaint = new SerialzablePaint();
+
 
     // for Eraser
     private int baseColor = Color.WHITE;
@@ -152,8 +163,12 @@ public class CanvasView extends View {
      *
      * @param context
      */
-    public CanvasView(Context context) {
+    public CanvasView(Context context,OnDrawingChangeListener onDrawingChangeListener) {
+
         super(context);
+
+        this.onDrawingChangeListener=onDrawingChangeListener;
+
         this.setup();
     }
 
