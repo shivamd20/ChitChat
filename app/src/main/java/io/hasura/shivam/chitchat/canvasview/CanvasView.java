@@ -15,12 +15,16 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class defines fields and methods for drawing.
  */
+
+
+
 public class CanvasView extends View {
     // Enumeration for Mode
     public   enum Mode {
@@ -43,8 +47,44 @@ public class CanvasView extends View {
     private Canvas canvas   = null;
     private Bitmap bitmap   = null;
 
-    private List<SerialzablePath>  pathLists  = new ArrayList<>();
-    private List<SerialzablePaint> paintLists = new ArrayList<>();
+    private class History implements Serializable{
+         List<SerialzablePath>  pathLists  = new ArrayList<>();
+         List<SerialzablePaint> paintLists = new ArrayList<>();
+
+        void add(SerialzablePath path,SerialzablePaint paint)
+        {
+            pathLists.add(path);
+            paintLists.add(paint);
+        }
+
+        void set(int i,SerialzablePath path,SerialzablePaint paint)
+        {
+            pathLists.set(i,path);
+            paintLists.set(i,paint);
+        }
+
+        void remove(int i)
+        {
+            paintLists.remove(i);
+            pathLists.remove(i);
+        }
+
+        SerialzablePath getPath(int i)
+        {
+            return pathLists.get(i);
+        }
+        SerialzablePaint getPaint(int i)
+        {
+            return paintLists.get(i);
+        }
+
+       int getSize()
+        {
+           return paintLists.size();
+        }
+    }
+
+    History history=new History();
 
     private final SerialzablePaint emptyPaint = new SerialzablePaint();
 
@@ -123,8 +163,11 @@ public class CanvasView extends View {
      */
     private void setup() {
 
-        this.pathLists.add(new SerialzablePath());
-        this.paintLists.add(this.createPaint());
+//        this.pathLists.add(new SerialzablePath());
+//        this.paintLists.add(this.createPaint());
+
+        history.add(new SerialzablePath(),new SerialzablePaint());
+
         this.historyPointer++;
 
         this.textPaint.setARGB(0, 255, 255, 255);
@@ -198,19 +241,22 @@ public class CanvasView extends View {
      * @param SerialzablePath the instance of SerialzablePath
      */
     private void updateHistory(SerialzablePath SerialzablePath) {
-        if (this.historyPointer == this.pathLists.size()) {
-            this.pathLists.add(SerialzablePath);
-            this.paintLists.add(this.createPaint());
+        if (this.historyPointer == this.history.getSize()) {
+
+            this.history.add(SerialzablePath,createPaint());
             this.historyPointer++;
         } else {
             // On the way of Undo or Redo
-            this.pathLists.set(this.historyPointer, SerialzablePath);
-            this.paintLists.set(this.historyPointer, this.createPaint());
+
+            this.history.set(this.historyPointer,SerialzablePath,this.createPaint());
+//            this.pathLists.set(this.historyPointer, SerialzablePath);
+//            this.paintLists.set(this.historyPointer, this.createPaint());
+
+
             this.historyPointer++;
 
-            for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
-                this.pathLists.remove(this.historyPointer);
-                this.paintLists.remove(this.historyPointer);
+            for (int i = this.historyPointer, size = this.history.getSize(); i < size; i++) {
+                this.history.remove(this.historyPointer);
             }
         }
     }
@@ -221,7 +267,7 @@ public class CanvasView extends View {
      * @return the instance of SerialzablePath
      */
     private SerialzablePath getCurrentPath() {
-        return this.pathLists.get(this.historyPointer - 1);
+        return this.history.getPath(this.historyPointer - 1);
     }
 
     /**
@@ -418,8 +464,8 @@ public class CanvasView extends View {
 
 
         for (int i = 0; i < this.historyPointer; i++) {
-            SerialzablePath SerialzablePath   = this.pathLists.get(i);
-            SerialzablePaint SerialzablePaint = this.paintLists.get(i);
+            SerialzablePath SerialzablePath   = this.history.getPath(i);
+            SerialzablePaint SerialzablePaint = this.history.getPaint(i);
 
             canvas.drawPath(SerialzablePath, SerialzablePaint);
         }
@@ -509,7 +555,7 @@ public class CanvasView extends View {
      * @return If Redo is available, this is returned as true. Otherwise, this is returned as false.
      */
     public boolean canRedo() {
-        return this.historyPointer < this.pathLists.size();
+        return this.historyPointer < this.history.getSize();
     }
 
     /**
@@ -570,19 +616,23 @@ public class CanvasView extends View {
 
 
 
-        if (this.historyPointer == this.pathLists.size()) {
-            this.pathLists.add(SerialzablePath);
-            this.paintLists.add(SerialzablePaint);
+        if (this.historyPointer == this.history.getSize()) {
+            this.history.add(SerialzablePath,SerialzablePaint);
             this.historyPointer++;
         } else {
             // On the way of Undo or Redo
-            this.pathLists.set(this.historyPointer, SerialzablePath);
-            this.paintLists.set(this.historyPointer, SerialzablePaint);
+
+            this.history.set(this.historyPointer,SerialzablePath,SerialzablePaint);
+//
+//            this.pathLists.set(this.historyPointer, SerialzablePath);
+//            this.paintLists.set(this.historyPointer, SerialzablePaint);
             this.historyPointer++;
 
-            for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
-                this.pathLists.remove(this.historyPointer);
-                this.paintLists.remove(this.historyPointer);
+            for (int i = this.historyPointer, size = this.history.getSize(); i < size; i++) {
+//                this.pathLists.remove(this.historyPointer);
+//                this.paintLists.remove(this.historyPointer);
+//
+                this.history.remove(this.historyPointer);
             }
         }
 
