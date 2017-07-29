@@ -59,22 +59,22 @@ public class CanvasView extends View {
 
         void add(SerialzablePath path,SerialzablePaint paint)
         {
-            long id=onDrawingChangeListener.onDrawingAdded(paint,path);
-            idList.add(id);
+           // long id=onDrawingChangeListener.onDrawingAdded(paint,path);
+         //   idList.add(id);
             pathLists.add(path);
             paintLists.add(paint);
         }
 
         void set(int i,SerialzablePath path,SerialzablePaint paint)
         {
-            onDrawingChangeListener.onDrawingUpdated(idList.get(i));
+           // onDrawingChangeListener.onDrawingUpdated(idList.get(i));
             pathLists.set(i,path);
             paintLists.set(i,paint);
         }
 
         void remove(int i)
         {
-            onDrawingChangeListener.onDrawingRemoved(i);
+            //onDrawingChangeListener.onDrawingUpdated(i);
             paintLists.remove(i);
             pathLists.remove(i);
         }
@@ -97,7 +97,6 @@ public class CanvasView extends View {
     History history=new History();
 
     private final SerialzablePaint emptyPaint = new SerialzablePaint();
-
 
     // for Eraser
     private int baseColor = Color.WHITE;

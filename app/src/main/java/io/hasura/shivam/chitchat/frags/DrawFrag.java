@@ -33,6 +33,8 @@ import java.util.Date;
 
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.canvasview.CanvasView;
+import io.hasura.shivam.chitchat.canvasview.SerialzablePaint;
+import io.hasura.shivam.chitchat.canvasview.SerialzablePath;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,6 +105,8 @@ public class DrawFrag extends Fragment {
         View view= inflater.inflate(R.layout.fragment_draw, container, false);
 
         this.canvas = (CanvasView)view.findViewById(R.id.canvas);
+
+      //  this.canvas.setOnDrawingChangeListener(this);
 
         undoBtn=(ImageButton)view.findViewById(R.id.undobtn);
         redoBtn=(ImageButton)view.findViewById(R.id.redobtn);
@@ -292,6 +296,21 @@ canvas.setMode(CanvasView.Mode.ERASER);
         super.onDetach();
         mListener = null;
     }
+
+//    @Override
+//    public long onDrawingAdded(SerialzablePaint paint, SerialzablePath path) {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void onDrawingRemoved(long id) {
+//
+//    }
+//
+//    @Override
+//    public void onDrawingUpdated(long id) {
+//
+//    }
 
     /**
      * This interface must be implemented by activities that contain this
