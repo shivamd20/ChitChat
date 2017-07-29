@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
@@ -17,9 +16,7 @@ import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * This class defines fields and methods for drawing.
@@ -46,10 +43,10 @@ public class CanvasView extends View {
     private Canvas canvas   = null;
     private Bitmap bitmap   = null;
 
-    private List<Path>  pathLists  = new ArrayList<>();
-    private List<Paint> paintLists = new ArrayList<>();
+    private List<SerialzablePath>  pathLists  = new ArrayList<>();
+    private List<SerialzablePaint> paintLists = new ArrayList<>();
 
-    private final Paint emptyPaint = new Paint();
+    private final SerialzablePaint emptyPaint = new SerialzablePaint();
 
     // for Eraser
     private int baseColor = Color.WHITE;
@@ -62,22 +59,22 @@ public class CanvasView extends View {
     private Drawer drawer  = Drawer.PEN;
     private boolean isDown = false;
 
-    // for Paint
-    private Paint.Style paintStyle    = Paint.Style.STROKE;
+    // for SerialzablePaint
+    private SerialzablePaint.Style paintStyle    = SerialzablePaint.Style.STROKE;
     private int paintStrokeColor      = Color.BLACK;
     private int paintFillColor        = Color.BLACK;
     private float paintStrokeWidth    = 3F;
     private int opacity               = 255;
     private float blur                = 0F;
-    private Paint.Cap lineCap         = Paint.Cap.ROUND;
+    private SerialzablePaint.Cap lineCap         = SerialzablePaint.Cap.ROUND;
    // private PathEffect drawPathEffect = null;
 
     // for Text
     private String text           = "";
     private Typeface fontFamily   = Typeface.DEFAULT;
     private float fontSize        = 32F;
-    private Paint.Align textAlign = Paint.Align.RIGHT;  // fixed
-    private Paint textPaint       = new Paint();
+    private SerialzablePaint.Align textAlign = SerialzablePaint.Align.RIGHT;  // fixed
+    private SerialzablePaint textPaint       = new SerialzablePaint();
     private float textX           = 0F;
     private float textY           = 0F;
 
@@ -126,7 +123,7 @@ public class CanvasView extends View {
      */
     private void setup() {
 
-        this.pathLists.add(new Path());
+        this.pathLists.add(new SerialzablePath());
         this.paintLists.add(this.createPaint());
         this.historyPointer++;
 
@@ -134,80 +131,80 @@ public class CanvasView extends View {
     }
 
     /**
-     * This method creates the instance of Paint.
-     * In addition, this method sets styles for Paint.
+     * This method creates the instance of SerialzablePaint.
+     * In addition, this method sets styles for SerialzablePaint.
      *
-     * @return paint This is returned as the instance of Paint
+     * @return SerialzablePaint This is returned as the instance of SerialzablePaint
      */
-    private Paint createPaint() {
-        Paint paint = new Paint();
+    private SerialzablePaint createPaint() {
+        SerialzablePaint SerialzablePaint = new SerialzablePaint();
 
-        paint.setAntiAlias(true);
-        paint.setStyle(this.paintStyle);
-        paint.setStrokeWidth(this.paintStrokeWidth);
-        paint.setStrokeCap(this.lineCap);
-        paint.setStrokeJoin(Paint.Join.MITER);  // fixed
+        SerialzablePaint.setAntiAlias(true);
+        SerialzablePaint.setStyle(this.paintStyle);
+        SerialzablePaint.setStrokeWidth(this.paintStrokeWidth);
+        SerialzablePaint.setStrokeCap(this.lineCap);
+        SerialzablePaint.setStrokeJoin(Paint.Join.MITER);  // fixed
 
         // for Text
         if (this.mode == Mode.TEXT) {
-            paint.setTypeface(this.fontFamily);
-            paint.setTextSize(this.fontSize);
-            paint.setTextAlign(this.textAlign);
-            paint.setStrokeWidth(0F);
+            SerialzablePaint.setTypeface(this.fontFamily);
+            SerialzablePaint.setTextSize(this.fontSize);
+            SerialzablePaint.setTextAlign(this.textAlign);
+            SerialzablePaint.setStrokeWidth(0F);
         }
 
         if (this.mode == Mode.ERASER) {
             // Eraser
-//            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-//            paint.setARGB(0, 0, 0, 0);
+//            SerialzablePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+//            SerialzablePaint.setARGB(0, 0, 0, 0);
 
-            paint.setColor(this.baseColor);
-            paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
+            SerialzablePaint.setColor(this.baseColor);
+            SerialzablePaint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
         } else {
             // Otherwise
-            paint.setColor(this.paintStrokeColor);
-            paint.setShadowLayer(this.blur, 0F, 0F, this.paintStrokeColor);
-            paint.setAlpha(this.opacity);
-           // paint.setPathEffect(this.drawPathEffect);
+            SerialzablePaint.setColor(this.paintStrokeColor);
+            SerialzablePaint.setShadowLayer(this.blur, 0F, 0F, this.paintStrokeColor);
+            SerialzablePaint.setAlpha(this.opacity);
+           // SerialzablePaint.setPathEffect(this.drawPathEffect);
         }
 
-        return paint;
+        return SerialzablePaint;
     }
 
     /**
-     * This method initialize Path.
-     * Namely, this method creates the instance of Path,
+     * This method initialize SerialzablePath.
+     * Namely, this method creates the instance of SerialzablePath,
      * and moves current position.
      *
      * @param event This is argument of onTouchEvent method
-     * @return path This is returned as the instance of Path
+     * @return SerialzablePath This is returned as the instance of SerialzablePath
      */
-    private Path createPath(MotionEvent event) {
-        Path path = new Path();
+    private SerialzablePath createPath(MotionEvent event) {
+        SerialzablePath SerialzablePath = new SerialzablePath();
 
         // Save for ACTION_MOVE
         this.startX = event.getX();
         this.startY = event.getY();
 
-        path.moveTo(this.startX, this.startY);
+        SerialzablePath.moveTo(this.startX, this.startY);
 
-        return path;
+        return SerialzablePath;
     }
 
     /**
-     * This method updates the lists for the instance of Path and Paint.
+     * This method updates the lists for the instance of SerialzablePath and SerialzablePaint.
      * "Undo" and "Redo" are enabled by this method.
      *
-     * @param path the instance of Path
+     * @param SerialzablePath the instance of SerialzablePath
      */
-    private void updateHistory(Path path) {
+    private void updateHistory(SerialzablePath SerialzablePath) {
         if (this.historyPointer == this.pathLists.size()) {
-            this.pathLists.add(path);
+            this.pathLists.add(SerialzablePath);
             this.paintLists.add(this.createPaint());
             this.historyPointer++;
         } else {
             // On the way of Undo or Redo
-            this.pathLists.set(this.historyPointer, path);
+            this.pathLists.set(this.historyPointer, SerialzablePath);
             this.paintLists.set(this.historyPointer, this.createPaint());
             this.historyPointer++;
 
@@ -219,11 +216,11 @@ public class CanvasView extends View {
     }
 
     /**
-     * This method gets the instance of Path that pointer indicates.
+     * This method gets the instance of SerialzablePath that pointer indicates.
      *
-     * @return the instance of Path
+     * @return the instance of SerialzablePath
      */
-    private Path getCurrentPath() {
+    private SerialzablePath getCurrentPath() {
         return this.pathLists.get(this.historyPointer - 1);
     }
 
@@ -247,7 +244,7 @@ public class CanvasView extends View {
         float textX = this.textX;
         float textY = this.textY;
 
-        Paint paintForMeasureText = new Paint();
+        SerialzablePaint paintForMeasureText = new SerialzablePaint();
 
         // Line break automatically
         float textLength   = paintForMeasureText.measureText(this.text);
@@ -329,40 +326,40 @@ public class CanvasView extends View {
                         return;
                     }
 
-                    Path path = this.getCurrentPath();
+                    SerialzablePath SerialzablePath = this.getCurrentPath();
 
                     switch (this.drawer) {
                         case PEN :
-                            path.lineTo(x, y);
+                            SerialzablePath.lineTo(x, y);
                             break;
                         case LINE :
-                            path.reset();
-                            path.moveTo(this.startX, this.startY);
-                            path.lineTo(x, y);
+                            SerialzablePath.reset();
+                            SerialzablePath.moveTo(this.startX, this.startY);
+                            SerialzablePath.lineTo(x, y);
                             break;
                         case RECTANGLE :
-                            path.reset();
+                            SerialzablePath.reset();
 
                             float left   = Math.min(this.startX, x);
                             float right  = Math.max(this.startX, x);
                             float top    = Math.min(this.startY, y);
                             float bottom = Math.max(this.startY, y);
 
-                            path.addRect(left, top, right, bottom, Path.Direction.CCW);
+                            SerialzablePath.addRect(left, top, right, bottom, Path.Direction.CCW);
                             break;
                         case CIRCLE :
                             double distanceX = Math.abs((double)(this.startX - x));
                             double distanceY = Math.abs((double)(this.startX - y));
                             double radius    = Math.sqrt(Math.pow(distanceX, 2.0) + Math.pow(distanceY, 2.0));
 
-                            path.reset();
-                            path.addCircle(this.startX, this.startY, (float)radius-50, Path.Direction.CCW);
+                            SerialzablePath.reset();
+                            SerialzablePath.addCircle(this.startX, this.startY, (float)radius-50, Path.Direction.CCW);
                             break;
                         case ELLIPSE :
                             RectF rect = new RectF(this.startX, this.startY, x, y);
 
-                            path.reset();
-                            path.addOval(rect, Path.Direction.CCW);
+                            SerialzablePath.reset();
+                            SerialzablePath.addOval(rect, Path.Direction.CCW);
                             break;
                         default :
                             break;
@@ -372,11 +369,11 @@ public class CanvasView extends View {
                         return;
                     }
 
-                    Path path = this.getCurrentPath();
+                    SerialzablePath SerialzablePath = this.getCurrentPath();
 
-                    path.reset();
-                    path.moveTo(this.startX, this.startY);
-                    path.quadTo(this.controlX, this.controlY, x, y);
+                    SerialzablePath.reset();
+                    SerialzablePath.moveTo(this.startX, this.startY);
+                    SerialzablePath.quadTo(this.controlX, this.controlY, x, y);
                 }
 
                 break;
@@ -421,10 +418,10 @@ public class CanvasView extends View {
 
 
         for (int i = 0; i < this.historyPointer; i++) {
-            Path path   = this.pathLists.get(i);
-            Paint paint = this.paintLists.get(i);
+            SerialzablePath SerialzablePath   = this.pathLists.get(i);
+            SerialzablePaint SerialzablePaint = this.paintLists.get(i);
 
-            canvas.drawPath(path, paint);
+            canvas.drawPath(SerialzablePath, SerialzablePaint);
         }
 
         this.drawText(canvas);
@@ -561,26 +558,26 @@ public class CanvasView extends View {
 
 
     public void clear() {
-        Path path = new Path();
-        path.moveTo(0F, 0F);
-        path.addRect(0F, 0F, super.getWidth(), super.getHeight(), Path.Direction.CCW);
-        path.close();
+        SerialzablePath SerialzablePath = new SerialzablePath();
+        SerialzablePath.moveTo(0F, 0F);
+        SerialzablePath.addRect(0F, 0F, super.getWidth(), super.getHeight(), Path.Direction.CCW);
+        SerialzablePath.close();
 
 
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
+        SerialzablePaint SerialzablePaint = new SerialzablePaint();
+        SerialzablePaint.setColor(Color.WHITE);
+        SerialzablePaint.setStyle(Paint.Style.FILL);
 
 
 
         if (this.historyPointer == this.pathLists.size()) {
-            this.pathLists.add(path);
-            this.paintLists.add(paint);
+            this.pathLists.add(SerialzablePath);
+            this.paintLists.add(SerialzablePaint);
             this.historyPointer++;
         } else {
             // On the way of Undo or Redo
-            this.pathLists.set(this.historyPointer, path);
-            this.paintLists.set(this.historyPointer, paint);
+            this.pathLists.set(this.historyPointer, SerialzablePath);
+            this.paintLists.set(this.historyPointer, SerialzablePaint);
             this.historyPointer++;
 
             for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
@@ -636,7 +633,7 @@ public class CanvasView extends View {
      *
      * @return
      */
-    public Paint.Style getPaintStyle() {
+    public SerialzablePaint.Style getPaintStyle() {
         return this.paintStyle;
     }
 
@@ -645,7 +642,7 @@ public class CanvasView extends View {
      *
      * @param style
      */
-    public void setPaintStyle(Paint.Style style) {
+    public void setPaintStyle(SerialzablePaint.Style style) {
         this.paintStyle = style;
     }
 
@@ -760,7 +757,7 @@ public class CanvasView extends View {
      *
      * @return
      */
-    public Paint.Cap getLineCap() {
+    public SerialzablePaint.Cap getLineCap() {
         return this.lineCap;
     }
 
@@ -769,12 +766,12 @@ public class CanvasView extends View {
      *
      * @param cap
      */
-    public void setLineCap(Paint.Cap cap) {
+    public void setLineCap(SerialzablePaint.Cap cap) {
         this.lineCap = cap;
     }
 
     /**
-     * This method is getter for path effect of drawing.
+     * This method is getter for SerialzablePath effect of drawing.
      *
      * @return drawPathEffect
 //     */
@@ -783,7 +780,7 @@ public class CanvasView extends View {
 //    }
 //
 //    /**
-//     * This method is setter for path effect of drawing.
+//     * This method is setter for SerialzablePath effect of drawing.
 //     *
 //     * @param drawPathEffect
 //     */
@@ -913,7 +910,7 @@ public class CanvasView extends View {
         return this.getBitmapAsByteArray(CompressFormat.PNG, 100);
     }
 
-    public void paintBucket( Point pt,  int replacementColor)
+   /* public void paintBucket( Point pt,  int replacementColor)
     {
         Bitmap bmp=this.getBitmap();
 
@@ -921,11 +918,11 @@ public class CanvasView extends View {
 
         FloodFill(bmp,pt,targetColor,replacementColor);
 
-        Path p=new Path();
+        SerialzablePath p=new SerialzablePath();
 
-    }
+    }*/
 
-    private Queue<Point> FloodFill(Bitmap bmp, Point pt, int targetColor, int replacementColor){
+/*    private Queue<Point> FloodFill(Bitmap bmp, Point pt, int targetColor, int replacementColor){
         Queue<Point> q = new LinkedList<>();
         q.add(pt);
         while (q.size() > 0) {
@@ -957,5 +954,5 @@ public class CanvasView extends View {
         }
 
         return  q;
-    }
+    }*/
 }
