@@ -78,7 +78,7 @@ public class CanvasView extends View {
 
         void remove(int i)
         {
-            onDrawingChangeListener.onDrawingUpdated(i);
+            onDrawingChangeListener.onDrawingRemoved(i);
             paintLists.remove(i);
             pathLists.remove(i);
         }

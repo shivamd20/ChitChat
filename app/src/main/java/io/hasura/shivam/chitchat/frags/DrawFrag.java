@@ -306,6 +306,8 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
         Toast.makeText(this.getContext(),"onAdd",Toast.LENGTH_SHORT).show();
 
+
+
         return 0;
     }
 
