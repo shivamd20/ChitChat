@@ -25,13 +25,17 @@ import java.util.List;
 
 public class CanvasView extends View {
 
-    interface OnDrawingChangeListener {
+  public   interface OnDrawingChangeListener {
        long  onDrawingAdded(SerialzablePaint paint,SerialzablePath path);
        void onDrawingRemoved(long id);
         void onDrawingUpdated(long id);
     }
 
     OnDrawingChangeListener onDrawingChangeListener;
+
+    public void setOnDrawingChangeListener(OnDrawingChangeListener onDrawingChangeListener) {
+        this.onDrawingChangeListener = onDrawingChangeListener;
+    }
 
     public   enum Mode {
         DRAW,
@@ -59,22 +63,22 @@ public class CanvasView extends View {
 
         void add(SerialzablePath path,SerialzablePaint paint)
         {
-           // long id=onDrawingChangeListener.onDrawingAdded(paint,path);
-         //   idList.add(id);
+            long id=onDrawingChangeListener.onDrawingAdded(paint,path);
+            idList.add(id);
             pathLists.add(path);
             paintLists.add(paint);
         }
 
         void set(int i,SerialzablePath path,SerialzablePaint paint)
         {
-           // onDrawingChangeListener.onDrawingUpdated(idList.get(i));
+            onDrawingChangeListener.onDrawingUpdated(idList.get(i));
             pathLists.set(i,path);
             paintLists.set(i,paint);
         }
 
         void remove(int i)
         {
-            //onDrawingChangeListener.onDrawingUpdated(i);
+            onDrawingChangeListener.onDrawingUpdated(i);
             paintLists.remove(i);
             pathLists.remove(i);
         }
@@ -143,7 +147,7 @@ public class CanvasView extends View {
      */
     public CanvasView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.setup();
+      //  this.setup();
     }
 
     /**
@@ -154,7 +158,7 @@ public class CanvasView extends View {
      */
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setup();
+     //   this.setup();
     }
 
     /**
@@ -162,20 +166,18 @@ public class CanvasView extends View {
      *
      * @param context
      */
-    public CanvasView(Context context,OnDrawingChangeListener onDrawingChangeListener) {
+    public CanvasView(Context context) {
 
         super(context);
-
-        this.onDrawingChangeListener=onDrawingChangeListener;
-
-        this.setup();
+      //  this.setup();
     }
+
 
     /**
      * Common initialization.
      *
      */
-    private void setup() {
+    public void setup() {
 
 //        this.pathLists.add(new SerialzablePath());
 //        this.paintLists.add(this.createPaint());

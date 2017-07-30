@@ -44,7 +44,7 @@ import io.hasura.shivam.chitchat.canvasview.SerialzablePath;
  * Use the {@link DrawFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DrawFrag extends Fragment {
+public class DrawFrag extends Fragment implements CanvasView.OnDrawingChangeListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -105,6 +105,10 @@ public class DrawFrag extends Fragment {
         View view= inflater.inflate(R.layout.fragment_draw, container, false);
 
         this.canvas = (CanvasView)view.findViewById(R.id.canvas);
+
+        this.canvas.setOnDrawingChangeListener(this);
+
+        this.canvas.setup();
 
       //  this.canvas.setOnDrawingChangeListener(this);
 
@@ -297,20 +301,25 @@ canvas.setMode(CanvasView.Mode.ERASER);
         mListener = null;
     }
 
-//    @Override
-//    public long onDrawingAdded(SerialzablePaint paint, SerialzablePath path) {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void onDrawingRemoved(long id) {
-//
-//    }
-//
-//    @Override
-//    public void onDrawingUpdated(long id) {
-//
-//    }
+    @Override
+    public long onDrawingAdded(SerialzablePaint paint, SerialzablePath path) {
+
+        Toast.makeText(this.getContext(),"onAdd",Toast.LENGTH_SHORT).show();
+
+        return 0;
+    }
+
+    @Override
+    public void onDrawingRemoved(long id) {
+
+        Toast.makeText(this.getContext(),"onRemov",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDrawingUpdated(long id) {
+        Toast.makeText(this.getContext(),"onUp",Toast.LENGTH_SHORT).show();
+
+    }
 
     /**
      * This interface must be implemented by activities that contain this
