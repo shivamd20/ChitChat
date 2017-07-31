@@ -4,6 +4,8 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 
+import java.io.Serializable;
+
 /**
  * Created by shivam on 30/7/17.
  */
@@ -14,7 +16,7 @@ import android.support.annotation.ColorInt;
     //shadowlayer
     //
 
-public class SerialzablePaint extends Paint {
+public class SerialzablePaint extends Paint implements Serializable{
 
     private Join join=getStrokeJoin();
     private float textSize=getTextSize();
@@ -28,8 +30,9 @@ public class SerialzablePaint extends Paint {
     private float mitter=getStrokeMiter();
     private Cap strokeCap=getStrokeCap();
     private Align textAlign=getTextAlign();
+    private Typeface typeFace=getTypeface();
 
-    void initialize()
+  public   void initialize()
     {
         setStrokeJoin(join);
         setTextSize(textSize);
@@ -104,6 +107,9 @@ public class SerialzablePaint extends Paint {
 
     @Override
     public Typeface setTypeface(Typeface typeface) {
+
+        this.typeFace=typeface;
+
         return super.setTypeface(typeface);
     }
 

@@ -168,7 +168,7 @@ public class GetNewMessages extends IntentService {
                         public void onSuccess(InsertResponse message) {
                             responseArrivedFetch = true;
 
-                            Log.e(TAG,"DELIVERY REPORTED");
+
 
 
                             //   sendMesseges();

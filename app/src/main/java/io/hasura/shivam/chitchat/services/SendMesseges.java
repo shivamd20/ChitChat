@@ -122,7 +122,7 @@ public class SendMesseges extends IntentService {
         // ActiveAndroid.endTransaction();
 
         if(conversations.size()<1) {
-            Log.i(TAG,"0 sendings");
+
 
             responseArrivedSend=true;
 

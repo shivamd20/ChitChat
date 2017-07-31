@@ -10,6 +10,7 @@ import android.widget.Toast;
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.ProjectConfig;
 import io.hasura.sdk.exception.HasuraInitException;
+import io.hasura.shivam.chitchat.activities.LoginActivity;
 import io.hasura.shivam.chitchat.services.GetNewMessages;
 import io.hasura.shivam.chitchat.services.SendMesseges;
 import io.hasura.shivam.chitchat.services.SyncContacts;
@@ -59,9 +60,16 @@ public class CustApplication extends com.activeandroid.app.Application {
         }
 
       //  startService(fetchmsgintent);
-        startService(syncintent);
-        startService(sendmsgintent);
-        startService(getNewMsg);
+
+        Hasura.getClient().getUser().setAuthToken(null);
+
+        if(Hasura.getClient().getUser().getAuthToken()!=null) {
+            startService(syncintent);
+            startService(sendmsgintent);
+            startService(getNewMsg);
+        }
+
+
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Encrypted ? "chitchat-db-encrypted" : "chitchat-db");
 //        Database db = Encrypted ? helper.getEncryptedWritableDb("chit-chat") : helper.getWritableDb();
 //        daoSession = new DaoMaster(db).newSession();

@@ -55,18 +55,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AccessToken accessToken = AccountKit.getCurrentAccessToken();
-/*
         if (accessToken != null) {
             Intent intent=new Intent(this,LoginActivity.class);
             finish();
             startActivity(intent);
+
+            stopSync=true;
             //Handle Returning User
         } else {
             //Handle new or logged out user
             Intent intent=new Intent(this,LoginActivity.class);
+
+            stopSync=true;
+
             finish();
             startActivity(intent);
-        }*/
+        }
 
 //
 //        Intent intent=new Intent(MainActivity.this,LoginActivity.class);
@@ -76,9 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
       HasuraUser haru= Hasura.getClient().getUser();
 
-        haru.setMobile("9406326735");
+        haru.setMobile("7389630407");
         haru.setPassword("123456");
-
 
 
         haru.login(new AuthResponseListener() {
@@ -90,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,s,Toast.LENGTH_LONG).show();
 
 
-                LoadRecentsFromDatabase loadRecentsFromDatabase=new LoadRecentsFromDatabase();
-                loadRecentsFromDatabase.execute();
             }
 
             @Override
@@ -151,6 +152,13 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        stopSync=true;
     }
 
     @Override
@@ -268,13 +276,14 @@ public class MainActivity extends AppCompatActivity {
 
             while(!stopSync) {
                 String str = new Select("max(time_date)").from(Conversation.class)
-                        .groupBy("with").toSql();
+                        .groupBy("with").where("isDraw=0").toSql();
 
                 conversationList = new Select()
                         .from(Conversation.class)
                         .where("time_date in (" + str + ")").orderBy("time_date DESC").execute();
 
                 publishProgress(conversationList);
+
 
                 try {
                     Thread.sleep(1000);

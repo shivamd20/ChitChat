@@ -2,12 +2,14 @@ package io.hasura.shivam.chitchat.frags;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,23 +20,36 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import io.hasura.shivam.chitchat.R;
+import io.hasura.shivam.chitchat.activities.ChatActivity;
 import io.hasura.shivam.chitchat.canvasview.CanvasView;
 import io.hasura.shivam.chitchat.canvasview.SerialzablePaint;
 import io.hasura.shivam.chitchat.canvasview.SerialzablePath;
+import io.hasura.shivam.chitchat.database.Conversation;
+import io.hasura.shivam.chitchat.database.Person;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,8 +69,9 @@ public class DrawFrag extends Fragment implements CanvasView.OnDrawingChangeList
     private String mParam1;
     private String mParam2;
 
-    LinearLayout toolbarBar;
+    public long me,with;
 
+    LinearLayout toolbarBar;
 
     private CanvasView canvas = null;
 
@@ -63,7 +79,6 @@ public class DrawFrag extends Fragment implements CanvasView.OnDrawingChangeList
     RadioButton drawBtn,textBtn;
 
     private OnFragmentInteractionListener mListener;
-
 
     public DrawFrag() {
         // Required empty public constructor
@@ -94,9 +109,12 @@ public class DrawFrag extends Fragment implements CanvasView.OnDrawingChangeList
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        with= ((ChatActivity)this.getActivity()).with;
+        me=((ChatActivity)this.getActivity()).me;
     }
 
-    int toolbarTopMargin=0;
+    //int toolbarTopMargin=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -303,24 +321,154 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
     @Override
     public long onDrawingAdded(SerialzablePaint paint, SerialzablePath path) {
-
         Toast.makeText(this.getContext(),"onAdd",Toast.LENGTH_SHORT).show();
 
+        Conversation conversation=new Conversation();
 
+        conversation.isMe=true;
+
+        conversation.isSent=false;
+
+        conversation.isDraw=true;
+
+        conversation.isDelivered=false;
+
+        conversation.with= Person.load(Person.class,with);
+
+        conversation.date= Calendar.getInstance().getTime();
+      //TODO
+            JSONObject msg = new JSONObject();
+        try {
+            msg.put("path", serialize(path));
+            msg.put("paint", serialize(paint));
+            conversation.message=msg.toString();
+
+
+           return conversation.save();
+
+        }catch (Exception e)
+        {
+            Log.e(TAG,e.toString());
+        }
 
         return 0;
     }
 
+    String TAG="DRAWFRAG";
+
     @Override
     public void onDrawingRemoved(long id) {
+
+        Conversation conversation=Conversation.load(Conversation.class,id);
+
+        new Delete().from(Conversation.class).where("Id=?",id);
 
         Toast.makeText(this.getContext(),"onRemov",Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onDrawingUpdated(long id) {
+    public void onDrawingUpdated(long id,SerialzablePath path,SerialzablePaint paint) {
         Toast.makeText(this.getContext(),"onUp",Toast.LENGTH_SHORT).show();
 
+        Conversation conversation=Conversation.load(Conversation.class,id);
+
+        conversation.date= Calendar.getInstance().getTime();
+        //TODO
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("path", serialize(path));
+            msg.put("paint", serialize(paint));
+            conversation.message=msg.toString();
+             conversation.save();
+
+        }catch (Exception e)
+        {
+            Log.e(TAG,e.toString());
+        }
+
+
+    }
+
+    @Override
+    public void initializeHistory(CanvasView.History history) {
+
+        List<Conversation> list=new Select().from(Conversation.class).where("isDraw=?",1).and("with=?",with).execute();
+
+       Cursor cur= ActiveAndroid.getDatabase().query(false,"conversation",null,"isDraw=1",null,null,null,null,null);
+
+
+        Toast.makeText(this.getContext(),"cursor size= "+cur.getCount(),Toast.LENGTH_SHORT).show();
+
+        try {
+
+        while(cur.moveToNext())
+        {
+           String msg= cur.getString(cur.getColumnIndex("message"));
+            JSONObject jsonObject = new JSONObject(msg);
+
+            SerialzablePaint paint = (SerialzablePaint) deserialize(jsonObject.get("paint").toString());
+
+            paint.initialize();
+
+            Toast.makeText(this.getContext(),"drawing saved",Toast.LENGTH_SHORT).show();
+
+            SerialzablePath path = (SerialzablePath) deserialize(jsonObject.get("path").toString());
+
+            path.initialize();
+
+
+            Toast.makeText(this.getActivity(),"drawing saved",Toast.LENGTH_SHORT).show();
+
+
+            history.pathLists.add(path);
+            history.paintLists.add(paint);
+            history.idList.add(cur.getLong(cur.getColumnIndex("Id")));
+
+        }
+
+            for (Conversation conversation : list) {
+
+                JSONObject jsonObject = new JSONObject(conversation.message);
+
+                SerialzablePaint paint = (SerialzablePaint) deserialize(jsonObject.get("paint").toString());
+
+                paint.initialize();
+
+                Toast.makeText(this.getContext(),"drawing saved",Toast.LENGTH_SHORT).show();
+
+                SerialzablePath path = (SerialzablePath) deserialize(jsonObject.get("path").toString());
+
+                path.initialize();
+
+                history.pathLists.add(path);
+                history.paintLists.add(paint);
+                history.idList.add(conversation.getId());
+
+            }
+        }catch (Exception e3)
+        {
+            Log.e(TAG,e3.toString());
+        }
+
+
+        Toast.makeText(this.getActivity(),"executed",Toast.LENGTH_SHORT).show();
+    }
+
+    public static String serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        String str=Base64.encodeToString(out.toByteArray(),Base64.URL_SAFE);
+        os.close();
+        return str;
+    }
+    public static Object deserialize(String str) throws IOException, ClassNotFoundException {
+        byte[] data=Base64.decode(str,Base64.URL_SAFE);
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is = new ObjectInputStream(in);
+       Object ob=  is.readObject();
+        is.close();
+        return ob;
     }
 
     /**
@@ -357,6 +505,8 @@ canvas.setMode(CanvasView.Mode.ERASER);
         } catch (IOException e) {
             Log.d("", "Error accessing file: " + e.getMessage());
         }
+
+
 
 
     }

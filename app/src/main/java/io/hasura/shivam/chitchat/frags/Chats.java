@@ -38,7 +38,7 @@ public class Chats extends Fragment implements OnClickListener {
 
     boolean isCancel=false;
 
-    private Random random;
+
 
     public static ChatAdapter chatAdapter;
     ListView msgListView;
@@ -51,7 +51,7 @@ public class Chats extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.chat_layout, container, false);
-        random = new Random();
+
 //        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
 //                "Chats");
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);

@@ -146,7 +146,7 @@ public class SyncContacts extends IntentService {
         }
         //   ActiveAndroid.endTransaction();
 
-        Log.e(TAG,"Contact Synced"+"    "+message.size());
+    //    Log.e(TAG,"Contact Synced"+"    "+message.size());
     }
 
     @Override
