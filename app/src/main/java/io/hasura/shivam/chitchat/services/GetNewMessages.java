@@ -42,7 +42,7 @@ public class GetNewMessages extends IntentService {
     private static final String EXTRA_PARAM1 = "io.hasura.shivam.chitchat.services.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "io.hasura.shivam.chitchat.services.extra.PARAM2";
     private boolean responseArrivedFetch = false;
-    private long waitFor = 5000;
+    private long waitFor = 50;
 
     List<MessegePool> message;
 

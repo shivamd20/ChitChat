@@ -16,6 +16,7 @@ import io.hasura.shivam.chitchat.services.SendMesseges;
 import io.hasura.shivam.chitchat.services.SyncContacts;
 
 public class CustApplication extends com.activeandroid.app.Application {
+    private static final String TAG = "APPLICATION";
 
     // Called when the application is starting, before any other application objects have been created.
     // Overriding this method is totally optional!
@@ -32,14 +33,8 @@ public class CustApplication extends com.activeandroid.app.Application {
         super.onCreate();
 
         Intent syncintent=new Intent(this.getApplicationContext(), SyncContacts.class);
-
-
-
         Intent sendmsgintent=new Intent(this.getApplicationContext(), SendMesseges.class);
-
         Intent getNewMsg=new Intent(this.getApplicationContext(), GetNewMessages.class);
-
-
 
         try {
 
@@ -52,6 +47,8 @@ public class CustApplication extends com.activeandroid.app.Application {
                     .build())
                     .enableLogs() // not included by default
                     .initialise(this);
+
+            Log.e(TAG,"initialized");
 
         } catch (HasuraInitException hie) {
             Toast.makeText(this, hie.getMessage(), Toast.LENGTH_SHORT).show();

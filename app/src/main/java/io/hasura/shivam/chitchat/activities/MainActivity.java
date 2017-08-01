@@ -25,6 +25,7 @@ import io.hasura.sdk.Hasura;
 import io.hasura.sdk.HasuraUser;
 import io.hasura.sdk.exception.HasuraException;
 import io.hasura.sdk.responseListener.AuthResponseListener;
+import io.hasura.sdk.responseListener.SyncStatusListener;
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.database.Conversation;
 import io.hasura.shivam.chitchat.database.Person;
@@ -51,63 +52,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AccessToken accessToken = AccountKit.getCurrentAccessToken();
-        if (accessToken != null) {
-            Intent intent=new Intent(this,LoginActivity.class);
-            finish();
-            startActivity(intent);
-
-            stopSync=true;
-            //Handle Returning User
-        } else {
-            //Handle new or logged out user
-            Intent intent=new Intent(this,LoginActivity.class);
-
-            stopSync=true;
-
-            finish();
-            startActivity(intent);
-        }
-
-//
-//        Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-//        finish();
-//        startActivity(intent);
+        Log.e(TAG,Hasura.getClient().getUser().isLoggedIn()+"");// this returns false even when user is logged in
 
 
-      HasuraUser haru= Hasura.getClient().getUser();
-
-        haru.setMobile("7389630407");
-        haru.setPassword("123456");
-
-
-        haru.login(new AuthResponseListener() {
-            @Override
-            public void onSuccess(String s) {
-
-
-
-                Toast.makeText(MainActivity.this,s,Toast.LENGTH_LONG).show();
-
-
-            }
-
-            @Override
-            public void onFailure(HasuraException e) {
-                Log.e("MainAtivity",""+e);
-            }
-        });
-
-//      if  ( Hasura.getClient().getUser().getAuthToken()==null)
-//        {
-//            Intent intent=new Intent(this,LoginActivity.class);
-//            finish();
-//            startActivity(intent);
-//
-//        }
 
         mRecyclerView=(RecyclerView)findViewById(R.id.main_recyler_view);
 
@@ -120,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.contacts_toolbar);
         setSupportActionBar(myToolbar);
 
-
-
          loadRecentsFromDatabase=new LoadRecentsFromDatabase();
         loadRecentsFromDatabase.execute();
     }
@@ -130,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+
+
         super.onStart();
 
     }
@@ -179,51 +132,21 @@ public class MainActivity extends AppCompatActivity {
         loadRecentsFromDatabase.execute();
     }
 
-    class LoadRecentsFromDatabase extends AsyncTask<Void,List<Conversation>,Void>{
+    class LoadRecentsFromDatabase extends AsyncTask<Void,List<Conversation>,Boolean>{
 
 
-        protected void onPostExecute(List<Conversation> conversations) {
-         //   super.onPostExecute(conversations);
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
 
-
-            Log.i("database messege",""+conversations.size());
-
-            for(Conversation X:conversations)
+            if(aBoolean)
             {
-                Log.i("database messege",""+X.message);
+                    Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                    finish();
+                    startActivity(intent);
+                    stopSync=true;
             }
-            if(recentRVAdapter==null)
-            recentRVAdapter=new RecentRVAdapter(conversations);
-            else
-                recentRVAdapter.swap(conversations);
-            mRecyclerView.setAdapter(recentRVAdapter);
-
-//            recentRVAdapter.setmOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                  //  loadRecentsFromDatabase.cancel(true);
-//                    stopSync=true;
-//                    int itempPos=mRecyclerView.getChildLayoutPosition(v);
-//                    Conversation cor=recentRVAdapter.getmDataset().get(itempPos);
-//
-//                    Intent intent=new Intent(MainActivity.this,ChatActivity.class);
-//
-//                    Log.i(TAG,"with main"+cor.with.getId());
-//
-//                    intent.putExtra("with",cor.with.getId());
-//
-//                    if(cor.with.getId()!=null)
-//                    startActivity(intent);
-//                    else{
-//                        Toast.makeText(MainActivity.this,"You can not talk with strangers" +
-//                                "first save his phone number and refresh your contact list",Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
         }
-
-
 
         @Override
         protected void onProgressUpdate(List<Conversation>... values) {
@@ -270,9 +193,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
 
             List<Conversation> conversationList;
+
+            Log.e(TAG,"inside async"+Hasura.getClient().getUser().isLoggedIn()+"");
+
+
+            if(!Hasura.getClient().getUser().isLoggedIn())
+            {
+                Log.e(TAG,"inside async"+Hasura.getClient().getUser().isLoggedIn()+"");
+
+                return true;
+            }
+
 
             while(!stopSync) {
                 String str = new Select("max(time_date)").from(Conversation.class)
@@ -290,11 +224,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-
             }
 
-            return null;
+            return false;
         }
 
         @Override

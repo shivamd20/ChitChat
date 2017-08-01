@@ -37,7 +37,7 @@ public class SendMesseges extends IntentService {
 
     String TAG="SEND MESSEGES";
     private boolean responseArrivedSend;
-    final private long waitFor=1000;
+    final private long waitFor=10;
 
     GetNewMessages.InsertResponse insertResponse;
 
@@ -115,6 +115,9 @@ public class SendMesseges extends IntentService {
 
     public  void sendMesseges()
     {
+
+
+        Log.e(TAG,"LOGGGGGGG"+Hasura.getClient().getUser().isLoggedIn()+"");
 
         // ActiveAndroid.beginTransaction();
         final List<Conversation> conversations=new Select().from(Conversation.class).where("(isSent=0)").and("isMe=1").execute();
