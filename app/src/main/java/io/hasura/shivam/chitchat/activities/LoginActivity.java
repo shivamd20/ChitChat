@@ -5,10 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
 
 import org.json.JSONObject;
-
 
 import io.hasura.sdk.Callback;
 import io.hasura.sdk.Hasura;
@@ -52,16 +50,11 @@ public class LoginActivity extends AppCompatActivity  {
 
     private static final int APP_REQUEST_CODE = 5000;
     private static final String TAG = "LOGINACTIVITY";
+    CardView cardView;
+    OkHttpClient client = new OkHttpClient();
+    HasuraUser hasuraUser;
     private View mProgressView;
     private View mLoginFormView;
-    CardView cardView;
-
-    OkHttpClient client = new OkHttpClient();
-
-
-    HasuraUser hasuraUser;
-
-
 
     public void phoneLogin(final View view) {
         final Intent intent = new Intent(this, AccountKitActivity.class);
@@ -212,7 +205,6 @@ public class LoginActivity extends AppCompatActivity  {
 
                         person.save();
 
-
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
                         startActivity(intent);
@@ -220,8 +212,6 @@ public class LoginActivity extends AppCompatActivity  {
                         LoginActivity.this.finish();
 
                         Intent syncintent=new Intent(LoginActivity.this.getApplicationContext(), SyncContacts.class);
-
-
 
                         Intent sendmsgintent=new Intent(LoginActivity.this.getApplicationContext(), SendMesseges.class);
 
@@ -352,7 +342,7 @@ public class LoginActivity extends AppCompatActivity  {
 
             try {
 
-                Log.e(TAG,"doinbackground");
+                //   Log.e(TAG,"doinbackground");
 
                 String url = "https://graph.accountkit.com/v1.2/me/?access_token=" + params[0];
                 Request request = new Request.Builder().url(url).build();

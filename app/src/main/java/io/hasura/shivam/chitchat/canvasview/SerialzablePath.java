@@ -19,6 +19,8 @@ import java.io.Serializable;
     //close
 
 public class SerialzablePath extends Path  implements Serializable{
+
+    static final long serialVersionUID = 90766469399250L;
     
     
     // for circle
@@ -41,13 +43,13 @@ public class SerialzablePath extends Path  implements Serializable{
     private float bottomRect;
     private Direction dirRect;
 
-   public void initialize()
-    {
-        addCircle(cirx,ciry,cirr,cirDir);
-        moveTo(movX,movY);
+   public void initialize() {
+       moveTo(movX, movY);
+       addCircle(cirx, ciry, cirr, Direction.CW);
+
         lineTo(linex,lineY);
         quadTo(quadX1,quadY1,quadX2,quadY2);
-        addRect(leftRect,topRect,rightRect,bottomRect,dirRect);
+       addRect(leftRect, topRect, rightRect, bottomRect, Direction.CW);
 
         super.close();
     }

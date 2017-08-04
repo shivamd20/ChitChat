@@ -1,9 +1,10 @@
 package io.hasura.shivam.chitchat.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,29 +16,25 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
-import com.facebook.accountkit.AccessToken;
-import com.facebook.accountkit.AccountKit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.hasura.sdk.Hasura;
-import io.hasura.sdk.HasuraUser;
-import io.hasura.sdk.exception.HasuraException;
-import io.hasura.sdk.responseListener.AuthResponseListener;
-import io.hasura.sdk.responseListener.SyncStatusListener;
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.database.Conversation;
-import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.recent.screens.RecentRVAdapter;
+import io.hasura.shivam.chitchat.services.GetNewMessages;
+import io.hasura.shivam.chitchat.services.SendMesseges;
+import io.hasura.shivam.chitchat.services.SyncContacts;
 
 public class MainActivity extends AppCompatActivity {
 
+    public boolean stopSync = false;
+    LoadRecentsFromDatabase loadRecentsFromDatabase;
+    String TAG = "MAINACTIVITY";
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecentRVAdapter recentRVAdapter;
-
-    public  boolean stopSync=false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,15 +49,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.e(TAG,Hasura.getClient().getUser().isLoggedIn()+"");// this returns false even when user is logged in
+
+        Intent syncintent = new Intent(this.getApplicationContext(), SyncContacts.class);
+        Intent sendmsgintent = new Intent(this.getApplicationContext(), SendMesseges.class);
+        Intent getNewMsg = new Intent(this.getApplicationContext(), GetNewMessages.class);
 
 
+        SharedPreferences sp = this.getSharedPreferences("HasuraUserStore", MODE_PRIVATE);
+
+        Log.e(TAG, sp.getString("AuthTokenKey", "null"));
+
+        Log.e(TAG, Hasura.getClient().getUser().isLoggedIn() + "");// this returns false even when user is logged in
 
         mRecyclerView=(RecyclerView)findViewById(R.id.main_recyler_view);
 
@@ -75,9 +77,24 @@ public class MainActivity extends AppCompatActivity {
 
          loadRecentsFromDatabase=new LoadRecentsFromDatabase();
         loadRecentsFromDatabase.execute();
-    }
 
-    LoadRecentsFromDatabase loadRecentsFromDatabase;
+        if (sp.getString("AuthTokenKey", "null").compareTo("null") == 0) {
+            Log.e(TAG, "NOT WORKING" + Hasura.getClient().getUser().isLoggedIn() + "");
+
+            Intent intent = new Intent(this, LoginActivity.class);
+
+            stopSync = true;
+
+            startActivity(intent);
+
+            finish();
+        } else {
+            startService(syncintent);
+            startService(sendmsgintent);
+            startService(getNewMsg);
+
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -200,14 +217,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG,"inside async"+Hasura.getClient().getUser().isLoggedIn()+"");
 
 
-            if(!Hasura.getClient().getUser().isLoggedIn())
-            {
-                Log.e(TAG,"inside async"+Hasura.getClient().getUser().isLoggedIn()+"");
-
-                return true;
-            }
-
-
             while(!stopSync) {
                 String str = new Select("max(time_date)").from(Conversation.class)
                         .groupBy("with").where("isDraw=0").toSql();
@@ -235,8 +244,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    String TAG="MAINACTIVITY";
 }
 
 

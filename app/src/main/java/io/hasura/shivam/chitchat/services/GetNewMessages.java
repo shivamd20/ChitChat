@@ -1,8 +1,8 @@
 package io.hasura.shivam.chitchat.services;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
@@ -35,16 +35,13 @@ public class GetNewMessages extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FOO = "io.hasura.shivam.chitchat.services.action.FOO";
     private static final String ACTION_BAZ = "io.hasura.shivam.chitchat.services.action.BAZ";
-
-    String TAG = "GETNEWMESSEGES";
-
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "io.hasura.shivam.chitchat.services.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "io.hasura.shivam.chitchat.services.extra.PARAM2";
+    String TAG = "GETNEWMESSEGES";
+    List<MessegePool> message;
     private boolean responseArrivedFetch = false;
     private long waitFor = 50;
-
-    List<MessegePool> message;
 
     public GetNewMessages() {
         super("GetNewMessages");
@@ -82,7 +79,7 @@ public class GetNewMessages extends IntentService {
 
     void onFetchResult() {
         //TODO add all to local database
-        Log.e(TAG, message.size() + "");
+        // Log.e(TAG, message.size() + "");
 
         //    ActiveAndroid.beginTransaction();
         for (MessegePool p : message) {
@@ -118,7 +115,7 @@ public class GetNewMessages extends IntentService {
         }
         //   ActiveAndroid.endTransaction();
 
-        Log.e(TAG, "Messege Fetched");
+        // Log.e(TAG, "Messege Fetched");
         // sendMesseges();
     }
 
@@ -266,9 +263,9 @@ public class GetNewMessages extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         try {
-            Log.e(TAG
+            //  Log.e(TAG
 
-                    , "Handle intent caled");
+            //             , "Handle intent caled");
             while (true) {
 
 
@@ -280,7 +277,7 @@ public class GetNewMessages extends IntentService {
 
                     Thread.currentThread().sleep(waitFor);
 
-                    Log.e(TAG, "waiting");
+                    //  Log.e(TAG, "waiting");
                 }
 
                 onFetchResult();

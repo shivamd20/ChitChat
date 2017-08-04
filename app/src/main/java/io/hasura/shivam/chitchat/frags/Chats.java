@@ -1,51 +1,44 @@
 package io.hasura.shivam.chitchat.frags;
 
-        import java.util.ArrayList;
-        import java.util.Calendar;
-        import java.util.List;
-        import java.util.Random;
+import android.annotation.TargetApi;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
-        import android.annotation.TargetApi;
-        import android.database.DataSetObserver;
-        import android.graphics.Canvas;
-        import android.graphics.drawable.BitmapDrawable;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.support.v4.app.Fragment;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.View.OnClickListener;
-        import android.view.ViewGroup;
-        import android.widget.EditText;
-        import android.widget.ImageButton;
-        import android.widget.ListView;
+import com.activeandroid.query.Select;
+import com.android.graphics.CanvasView;
 
-        import com.activeandroid.query.Select;
-        import com.android.graphics.CanvasView;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
-        import io.hasura.shivam.chitchat.R;
-        import io.hasura.shivam.chitchat.activities.ChatActivity;
-        import io.hasura.shivam.chitchat.database.Conversation;
-        import io.hasura.shivam.chitchat.database.Person;
-        import io.hasura.shivam.chitchat.frags.mChat.ChatAdapter;
+import io.hasura.shivam.chitchat.R;
+import io.hasura.shivam.chitchat.activities.ChatActivity;
+import io.hasura.shivam.chitchat.database.Conversation;
+import io.hasura.shivam.chitchat.database.Person;
+import io.hasura.shivam.chitchat.frags.mChat.ChatAdapter;
 
 
 public class Chats extends Fragment implements OnClickListener {
 
-    private EditText msg_edittext;
+    public static ChatAdapter chatAdapter;
     public long me,with;
 
     boolean isCancel=false;
-
-
-
-    public static ChatAdapter chatAdapter;
     ListView msgListView;
     CanvasView canvasView;
-
     GetMesseges getMesseges;
-
+    private EditText msg_edittext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,9 +74,11 @@ public class Chats extends Fragment implements OnClickListener {
 
         msgListView.setAdapter(chatAdapter);
 
-
          getMesseges=new GetMesseges();
         getMesseges.execute();
+
+        drawBackground();
+
         return view;
     }
 
@@ -96,6 +91,9 @@ public class Chats extends Fragment implements OnClickListener {
 
             if(canvasView!=null) {
                 Canvas canvas=new Canvas();
+
+                msgListView.setBackgroundResource(R.drawable.welcome);
+
                 msgListView.setBackground(new BitmapDrawable(getResources(),canvasView.getBitmap()));
             }
         } else{

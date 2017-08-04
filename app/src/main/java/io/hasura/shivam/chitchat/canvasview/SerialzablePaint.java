@@ -18,11 +18,12 @@ import java.io.Serializable;
 
 public class SerialzablePaint extends Paint implements Serializable{
 
+    static final long serialVersionUID = 907664693992501L;
+    boolean antiAlias = super.isAntiAlias();
     private Join join=getStrokeJoin();
     private float textSize=getTextSize();
     private int shadowColor;
     private float blur;
-    boolean antiAlias=super.isAntiAlias();
     private Style style=super.getStyle();
     private int color=getColor();
     private int alpha=getAlpha();

@@ -1,24 +1,18 @@
 package io.hasura.shivam.chitchat.services;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,10 +24,8 @@ import java.util.List;
 import io.hasura.sdk.Callback;
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.exception.HasuraException;
-import io.hasura.shivam.chitchat.activities.ApiTestingActivity;
 import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.queclasses.PersonDetails;
-import io.hasura.shivam.chitchat.queclasses.SelectQueryPerson;
 
 public class SyncContacts extends IntentService {
 
@@ -45,27 +37,55 @@ public class SyncContacts extends IntentService {
     String TAG="SYNC CONTACTS";
 
     List<PersonDetails> message;
-
-
-    @Override
-    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-         super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
-    }
+    /**
+     * indicates how to behave if the service is killed
+     */
+    int mStartMode;
+    /**
+     * interface for clients that bind
+     */
+    IBinder mBinder;
+    /**
+     * indicates whether onRebind should be used
+     */
+    boolean mAllowRebind;
+    Context mContext;
 
     public SyncContacts()
     {
         super("sync Contacts");
     }
 
-    /** indicates how to behave if the service is killed */
-    int mStartMode;
+    public static String getContactName(Context context, String number) {
 
-    /** interface for clients that bind */
-    IBinder mBinder;
+        String name = null;
 
-    /** indicates whether onRebind should be used */
-    boolean mAllowRebind;
+        // define the columns I want the query to return
+        String[] projection = new String[]{
+                ContactsContract.PhoneLookup.DISPLAY_NAME,
+                ContactsContract.PhoneLookup._ID};
+
+        // encode the phone number and build the filter URI
+        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        // query time
+        Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+            } else {
+            }
+            cursor.close();
+        }
+        return name;
+    }
+
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
 
     /** Called when the service is being created. */
     @Override
@@ -75,7 +95,6 @@ public class SyncContacts extends IntentService {
         mContext=this.getApplicationContext();
     }
 
-    Context mContext;
     /** The service is starting, due to a call to startService() */
 
     void onSyncResult(){
@@ -178,16 +197,10 @@ public class SyncContacts extends IntentService {
                                 contactNumber= contactNumber.replace(" ","");
                                 if(contactNumber.length()>=10) {
 
-                                    //   contactNumber.replace("-","");
                                     try {
-
-
                                         contactNumber = contactNumber.substring(contactNumber.length() - 10, contactNumber.length());
-
                                         Long.parseLong(contactNumber);
-
                                         //  Log.i("number", contactNumber);
-
                                         alContacts.add(new String[]{contactNumber,});
                                     }
                                     catch (NumberFormatException ne)
@@ -195,7 +208,6 @@ public class SyncContacts extends IntentService {
                                         Log.e(TAG,ne.toString());
                                     }
                                 }
-
                                 break;
                             }
                             pCur.close();
@@ -299,31 +311,6 @@ public class SyncContacts extends IntentService {
         }
 
         return ;
-    }
-
-    public static String getContactName(Context context, String number) {
-
-        String name = null;
-
-        // define the columns I want the query to return
-        String[] projection = new String[] {
-                ContactsContract.PhoneLookup.DISPLAY_NAME,
-                ContactsContract.PhoneLookup._ID};
-
-        // encode the phone number and build the filter URI
-        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-
-        // query time
-        Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
-
-        if(cursor != null) {
-            if (cursor.moveToFirst()) {
-                name =      cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-            } else {
-            }
-            cursor.close();
-        }
-        return name;
     }
 
 

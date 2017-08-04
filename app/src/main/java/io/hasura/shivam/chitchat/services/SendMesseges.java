@@ -1,8 +1,8 @@
 package io.hasura.shivam.chitchat.services;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.activeandroid.query.Select;
@@ -34,12 +34,10 @@ public class SendMesseges extends IntentService {
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "io.hasura.shivam.chitchat.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "io.hasura.shivam.chitchat.extra.PARAM2";
-
+    final private long waitFor = 50;
     String TAG="SEND MESSEGES";
-    private boolean responseArrivedSend;
-    final private long waitFor=10;
-
     GetNewMessages.InsertResponse insertResponse;
+    private boolean responseArrivedSend;
 
     public SendMesseges() {
         super("SendMesseges");
@@ -85,7 +83,7 @@ public class SendMesseges extends IntentService {
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         try {
-            Log.e(TAG,"Handle intent caled");
+            //  Log.e(TAG,"Handle intent caled");
             while (true) {
 
 
@@ -98,7 +96,7 @@ public class SendMesseges extends IntentService {
 
                     Thread.currentThread().sleep(waitFor);
 
-                    Log.e(TAG,"waiting");
+                    // Log.e(TAG,"waiting");
                 }
 
                 responseArrivedSend=false;
@@ -117,7 +115,6 @@ public class SendMesseges extends IntentService {
     {
 
 
-        Log.e(TAG,"LOGGGGGGG"+Hasura.getClient().getUser().isLoggedIn()+"");
 
         // ActiveAndroid.beginTransaction();
         final List<Conversation> conversations=new Select().from(Conversation.class).where("(isSent=0)").and("isMe=1").execute();

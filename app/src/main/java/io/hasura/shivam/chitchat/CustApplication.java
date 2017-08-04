@@ -1,19 +1,13 @@
 package io.hasura.shivam.chitchat;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.widget.Toast;
 
-
-
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.ProjectConfig;
 import io.hasura.sdk.exception.HasuraInitException;
-import io.hasura.shivam.chitchat.activities.LoginActivity;
-import io.hasura.shivam.chitchat.services.GetNewMessages;
-import io.hasura.shivam.chitchat.services.SendMesseges;
-import io.hasura.shivam.chitchat.services.SyncContacts;
 
 public class CustApplication extends com.activeandroid.app.Application {
     private static final String TAG = "APPLICATION";
@@ -32,9 +26,6 @@ public class CustApplication extends com.activeandroid.app.Application {
     public void onCreate() {
         super.onCreate();
 
-        Intent syncintent=new Intent(this.getApplicationContext(), SyncContacts.class);
-        Intent sendmsgintent=new Intent(this.getApplicationContext(), SendMesseges.class);
-        Intent getNewMsg=new Intent(this.getApplicationContext(), GetNewMessages.class);
 
         try {
 
@@ -58,13 +49,12 @@ public class CustApplication extends com.activeandroid.app.Application {
 
       //  startService(fetchmsgintent);
 
-        Hasura.getClient().getUser().setAuthToken(null);
+        SharedPreferences sp = this.getSharedPreferences("HasuraUserStore", MODE_PRIVATE);
 
-        if(Hasura.getClient().getUser().getAuthToken()!=null) {
-            startService(syncintent);
-            startService(sendmsgintent);
-            startService(getNewMsg);
-        }
+
+        //  Hasura.getClient().getUser().setAuthToken(null);
+
+
 
 
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, Encrypted ? "chitchat-db-encrypted" : "chitchat-db");
