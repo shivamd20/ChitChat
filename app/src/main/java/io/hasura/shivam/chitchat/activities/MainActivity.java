@@ -22,6 +22,7 @@ import java.util.List;
 import io.hasura.sdk.Hasura;
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.database.Conversation;
+import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.recent.screens.RecentRVAdapter;
 import io.hasura.shivam.chitchat.services.GetNewMessages;
 import io.hasura.shivam.chitchat.services.SendMesseges;
@@ -216,12 +217,13 @@ public class MainActivity extends AppCompatActivity {
 
             Log.e(TAG,"inside async"+Hasura.getClient().getUser().isLoggedIn()+"");
 
+            long me = new Select().from(Person.class).where("mobile=?", Hasura.getClient().getUser().getMobile()).executeSingle().getId();
 
             while(!stopSync) {
                 String str = new Select("max(time_date)").from(Conversation.class)
-                        .groupBy("with").where("isDraw=0").toSql();
+                        .groupBy("with").where("isDraw=0").and("with!=" + me).toSql();
 
-                conversationList = new Select()
+                conversationList = new Select().distinct()
                         .from(Conversation.class)
                         .where("time_date in (" + str + ")").orderBy("time_date DESC").execute();
 

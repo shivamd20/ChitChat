@@ -325,6 +325,10 @@ public class LoginActivity extends AppCompatActivity  {
 
                             }
                         });
+                    } else {
+                        showProgress(false);
+
+                        Log.e(TAG, e.toString());
                     }
                 }
             });

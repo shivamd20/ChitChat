@@ -1,12 +1,8 @@
 package io.hasura.shivam.chitchat.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,10 +17,9 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
+import io.hasura.sdk.Hasura;
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.contacts.ContactsRVAdapter;
-import io.hasura.shivam.chitchat.database.Conversation;
-import io.hasura.shivam.chitchat.database.DBContract;
 import io.hasura.shivam.chitchat.database.Person;
 
 import static io.hasura.shivam.chitchat.services.SyncContacts.getContactName;
@@ -33,11 +27,9 @@ import static io.hasura.shivam.chitchat.services.SyncContacts.getContactName;
 public class CantactsActivity extends AppCompatActivity {
 
     String TAG="CONTACTSACTIVITY";
-
+    ContactsRVAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    ContactsRVAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +107,10 @@ public class CantactsActivity extends AppCompatActivity {
 
         @Override
         protected List<Person> doInBackground(Void... params) {
-            List<Person> list= new Select("*").from(Person.class).orderBy("name ASC").execute();
+
+            List<Person> list = new Select().from(Person.class).where("mobile!=?", Hasura.getClient().getUser().getMobile()).execute();
+
+            // List<Person> list= new Select("*").from(Person.class).orderBy("name ASC").execute();
             for(Person p:list)
             {
                 p.name=getContactName(CantactsActivity.this,p.mobile);

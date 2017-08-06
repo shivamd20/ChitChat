@@ -1,23 +1,20 @@
 package io.hasura.shivam.chitchat.activities;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.activeandroid.query.Select;
 
-import io.hasura.sdk.Hasura;
 import io.hasura.shivam.chitchat.R;
-import io.hasura.shivam.chitchat.database.Conversation;
 import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.frags.Chats;
 import io.hasura.shivam.chitchat.frags.DrawFrag;
@@ -25,6 +22,7 @@ import io.hasura.shivam.chitchat.frags.mChat.ViewPagerRemovingSwipe;
 
 public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragmentInteractionListener{
 
+    public long me, with;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -34,10 +32,6 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    public long me,with;
-
-
     /**
      * The {@link io.hasura.shivam.chitchat.frags.mChat.ViewPagerRemovingSwipe} that will host the section contents.
      */
@@ -59,7 +53,6 @@ public class ChatActivity extends AppCompatActivity implements DrawFrag.OnFragme
         this.setTitle(per.name);
 
         else
-
             this.setTitle(with+"");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
