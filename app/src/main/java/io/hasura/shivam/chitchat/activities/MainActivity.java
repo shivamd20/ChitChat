@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent syncintent = new Intent(this.getApplicationContext(), SyncContacts.class);
-        Intent sendmsgintent = new Intent(this.getApplicationContext(), SendMesseges.class);
-        Intent getNewMsg = new Intent(this.getApplicationContext(), GetNewMessages.class);
+       //// Intent sendmsgintent = new Intent(this.getApplicationContext(), SendMesseges.class);
+       // Intent getNewMsg = new Intent(this.getApplicationContext(), GetNewMessages.class);
 
 
         SharedPreferences sp = this.getSharedPreferences("HasuraUserStore", MODE_PRIVATE);
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             startService(syncintent);
-            startService(sendmsgintent);
-            startService(getNewMsg);
+           // startService(sendmsgintent);
+           // startService(getNewMsg);
 
         }
     }

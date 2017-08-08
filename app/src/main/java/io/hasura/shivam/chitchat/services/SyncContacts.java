@@ -288,6 +288,14 @@ public class SyncContacts extends IntentService {
                         Thread.currentThread().sleep(waitFor);
                     }
 
+                   // Intent syncintent = new Intent(this.getApplicationContext(), SyncContacts.class);
+                    Intent sendmsgintent = new Intent(this.getApplicationContext(), SendMesseges.class);
+                    Intent getNewMsg = new Intent(this.getApplicationContext(), GetNewMessages.class);
+
+                    startService(sendmsgintent);
+                    startService(getNewMsg);
+
+
                     onSyncResult();
 
                     responseArrived=false;
@@ -299,10 +307,6 @@ public class SyncContacts extends IntentService {
                 }
 
                 Thread.sleep(waitFor);
-
-
-
-
             }
         }
         catch (/*Interrupted*/Exception ie)

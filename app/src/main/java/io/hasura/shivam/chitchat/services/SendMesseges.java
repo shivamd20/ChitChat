@@ -80,11 +80,11 @@ public class SendMesseges extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+       // Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         try {
             //  Log.e(TAG,"Handle intent caled");
-            while (true) {
+
 
 
                 // sendMesseges.start();
@@ -100,7 +100,7 @@ public class SendMesseges extends IntentService {
                 }
 
                 responseArrivedSend=false;
-            }
+
         }
 
         catch (/*Interrupted*/Exception ie)

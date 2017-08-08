@@ -265,9 +265,6 @@ public class GetNewMessages extends IntentService {
         try {
             //  Log.e(TAG
 
-            //             , "Handle intent caled");
-            while (true) {
-
 
                 fetchMesseges();
                 //   sendMesseges.start();
@@ -282,9 +279,7 @@ public class GetNewMessages extends IntentService {
 
                 onFetchResult();
 
-                responseArrivedFetch = false;
 
-            }
         } catch (/*Interrupted*/Exception ie) {
             Log.e(TAG, ie.toString());
         }
