@@ -1,5 +1,6 @@
 package io.hasura.shivam.chitchat.database;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,41 +9,41 @@ import android.provider.BaseColumns;
 
 public   interface DBContract {
 
-   public static interface Contacts extends BaseColumns
-    {
 
-        String TABLE_NAME="contacts";
-        //String
-        public static final String NAME ="name";
+    String CONTENT_AUTHORITY = "io.hasura.chitchat";
+    Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    String PATH_CONVERSATION = "chats";
 
-        //Long
-        public static final String MOB ="mob";
+    interface Person extends BaseColumns {
+        String TABLE_NAME = "Person";
+        String mobile = "mobile";
 
-        //BLOB
-        public static final String PROFILE_PIC ="prof_pic";
+        String name = "name";
+        String user_id = "user_id";
+        String profile_pic = "profile_pic";
     }
 
-    public static interface Chats extends BaseColumns
+    interface Chats extends BaseColumns
     {
 
-        String TABLE_NAME="chats";
-        //LONG
-        public static final String WITH ="with";
 
-        public static final String ISME ="isme";
-        public static final String DATE_TIME ="datetime";
-        public static final String MESSEGE ="message";
-        public static final String ISDELIVERED ="isDelivered";
+        String msg_id = "msg_id";
+
+        String isRead = "isRead";
+
+
+        String date = "time_date";
+
+        String message = "messege";
+
+        String isMe = "isMe";
+
+        String isDraw = "isDraw";
+
+        String isDelivered = "isDelivered";
+
+        String with = "with";
+
+        String isSent = "isSent";
     }
-
-    public static interface Draws extends BaseColumns
-    {
-        String TABLE_NAME="draws";
-        public static final String WITH ="with";
-        public static final String ISME ="isme";
-        public static final String DATE_TIME ="datetime";
-        public static final String TODRAW ="todraw";
-        public static final String ISDELIVERED ="isDelivered";
-    }
-
 }

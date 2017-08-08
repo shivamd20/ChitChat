@@ -24,8 +24,10 @@ import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.database.Conversation;
 import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.recent.screens.RecentRVAdapter;
+import io.hasura.shivam.chitchat.services.AccountGeneral;
 import io.hasura.shivam.chitchat.services.GetNewMessages;
 import io.hasura.shivam.chitchat.services.SendMesseges;
+import io.hasura.shivam.chitchat.services.SyncAdapter;
 import io.hasura.shivam.chitchat.services.SyncContacts;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AccountGeneral.createSyncAccount(this);
+
+        SyncAdapter.performSync();
 
 
         Intent syncintent = new Intent(this.getApplicationContext(), SyncContacts.class);

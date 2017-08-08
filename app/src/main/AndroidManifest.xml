@@ -108,7 +108,34 @@
             android:exported="false" />
         <service
             android:name=".services.GetNewMessages"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <provider
+            android:name=".database.ChatsProvider"
+            android:authorities="io.hasura.chitchat"
+            android:enabled="true"
+            android:exported="false"
+            android:syncable="true" />
+
+        <service android:name=".services.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name=".services.SyncService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
     </application>
 
 </manifest>
