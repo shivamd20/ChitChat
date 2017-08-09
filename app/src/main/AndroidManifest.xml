@@ -49,7 +49,7 @@
             android:name=".activities.ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar">
-    
+
         </activity>
         <activity
             android:name=".activities.MainActivity"
@@ -71,6 +71,7 @@
         <activity
             android:name=".activities.ApiTestingActivity"
             android:label="@string/title_activity_api_testing"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
 
