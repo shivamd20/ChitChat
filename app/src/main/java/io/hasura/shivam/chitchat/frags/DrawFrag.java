@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
@@ -331,7 +330,7 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
     @Override
     public long onDrawingAdded(SerialzablePaint paint, SerialzablePath path) {
-        Toast.makeText(this.getContext(),"onAdd",Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this.getContext(),"onAdd",Toast.LENGTH_SHORT).show();
 
         Conversation conversation=new Conversation();
 
@@ -371,12 +370,12 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
         new Delete().from(Conversation.class).where("Id=?",id);
 
-        Toast.makeText(this.getContext(),"onRemov",Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this.getContext(),"onRemov",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDrawingUpdated(long id,SerialzablePath path,SerialzablePaint paint) {
-        Toast.makeText(this.getContext(),"onUp",Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this.getContext(),"onUp",Toast.LENGTH_SHORT).show();
 
         Conversation conversation=Conversation.load(Conversation.class,id);
 
@@ -402,7 +401,7 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
        Cursor cur= ActiveAndroid.getDatabase().query(false,"conversation",null,"isDraw=1",null,null,null,null,null);
 
-        Toast.makeText(this.getContext(),"cursor size= "+cur.getCount(),Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(this.getContext(),"cursor size= "+cur.getCount(),Toast.LENGTH_SHORT).show();
 
         try {
 
@@ -415,14 +414,14 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
             paint.initialize();
 
-            Toast.makeText(this.getContext(),"drawing saved",Toast.LENGTH_SHORT).show();
+            //     Toast.makeText(this.getContext(),"drawing saved",Toast.LENGTH_SHORT).show();
 
             SerialzablePath path = (SerialzablePath) deserialize(jsonObject.get("path").toString());
 
             path.initialize();
 
 
-            Toast.makeText(this.getActivity(),"drawing saved",Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(this.getActivity(),"drawing saved",Toast.LENGTH_SHORT).show();
 
 
             history.pathLists.add(path);
@@ -439,7 +438,7 @@ canvas.setMode(CanvasView.Mode.ERASER);
 
                 paint.initialize();
 
-                Toast.makeText(this.getContext(),"drawing saved",Toast.LENGTH_SHORT).show();
+                //      Toast.makeText(this.getContext(),"drawing saved",Toast.LENGTH_SHORT).show();
 
                 SerialzablePath path = (SerialzablePath) deserialize(jsonObject.get("path").toString());
 
@@ -456,7 +455,7 @@ canvas.setMode(CanvasView.Mode.ERASER);
         }
 
 
-        Toast.makeText(this.getActivity(),"executed",Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(this.getActivity(),"executed",Toast.LENGTH_SHORT).show();
     }
 
     private void storeImage(Bitmap image) {
@@ -471,7 +470,7 @@ canvas.setMode(CanvasView.Mode.ERASER);
             image.compress(Bitmap.CompressFormat.PNG, 90, fos);
             fos.close();
 
-            Toast.makeText(getContext(),"image saved to "+pictureFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+            //    Toast.makeText(getContext(),"image saved to "+pictureFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
 
         } catch (FileNotFoundException e) {
             Log.d("", "File not found: " + e.getMessage());

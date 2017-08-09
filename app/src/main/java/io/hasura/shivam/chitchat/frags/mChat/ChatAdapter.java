@@ -1,9 +1,5 @@
 package io.hasura.shivam.chitchat.frags.mChat;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -16,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.database.Conversation;
 
@@ -23,6 +22,13 @@ public class ChatAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     List<Conversation> chatMessageList;
+
+    public ChatAdapter(Activity activity, List<Conversation> list) {
+        chatMessageList = list;
+        inflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    }
 
     public List<Conversation> getChatMessageList() {
         return chatMessageList;
@@ -35,13 +41,6 @@ public class ChatAdapter extends BaseAdapter {
     public void clear()
     {
         chatMessageList.clear();
-    }
-
-    public ChatAdapter(Activity activity, List<Conversation> list) {
-        chatMessageList = list;
-        inflater = (LayoutInflater) activity
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
@@ -96,8 +95,6 @@ public class ChatAdapter extends BaseAdapter {
             }
             }
 
-
-
         TextView msg = (TextView) vi.findViewById(R.id.message_text);
         msg.setText(message.message);
         LinearLayout layout = (LinearLayout) vi
@@ -115,15 +112,14 @@ public class ChatAdapter extends BaseAdapter {
         // If not mine then align to left
         else
             {
-
                 msgStatusView.setVisibility(View.GONE);
-
             layout.setBackgroundResource(R.drawable.bubble1);
             parent_layout.setGravity(Gravity.LEFT);
         }
         msg.setTextColor(Color.BLACK);
         return vi;
     }
+
 //    public String printDifference(Date startDate, Date endDate){
 //
 //        StringBuilder sb=new StringBuilder();

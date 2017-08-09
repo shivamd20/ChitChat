@@ -1,16 +1,19 @@
 package io.hasura.shivam.chitchat.frags;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -62,6 +65,38 @@ public class Chats extends Fragment implements OnClickListener {
 
         with= ((ChatActivity )this.getActivity()).with;
         me=((ChatActivity)this.getActivity()).me;
+
+        msgListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                final Conversation conversation = (Conversation) msgListView.getAdapter().getItem(position);
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+
+                                conversation.delete();
+
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Chats.this.getActivity());
+                builder.setTitle("DELETE \"" + conversation.message + "\"").setMessage("Are you sure you want to delete this message?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+
+            }
+        });
 
 
 
