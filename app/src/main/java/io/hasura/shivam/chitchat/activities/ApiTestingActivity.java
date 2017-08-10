@@ -22,7 +22,7 @@ import io.hasura.shivam.chitchat.queclasses.SelectQueryPerson;
 
 public class ApiTestingActivity extends AppCompatActivity {
 
-
+    //
     HasuraUser user=Hasura.getClient().getUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
