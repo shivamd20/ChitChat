@@ -21,7 +21,7 @@ import io.hasura.shivam.chitchat.queclasses.PersonDetails;
 import io.hasura.shivam.chitchat.queclasses.SelectQueryPerson;
 
 public class ApiTestingActivity extends AppCompatActivity {
-    //
+
 
     HasuraUser user=Hasura.getClient().getUser();
     @Override
