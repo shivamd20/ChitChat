@@ -14,8 +14,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.activeandroid.ActiveAndroid;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,123 +25,41 @@ import java.util.List;
 
 public class CanvasView extends View {
 
-  public   interface OnDrawingChangeListener {
-       long  onDrawingAdded(SerialzablePaint paint,SerialzablePath path);
-       void onDrawingRemoved(long id);
-        void onDrawingUpdated(long id,SerialzablePath path,SerialzablePaint paint);
-      void initializeHistory(History history);
-
-    }
-
+    private final SerialzablePaint emptyPaint = new SerialzablePaint();
     OnDrawingChangeListener onDrawingChangeListener;
-
-    public void setOnDrawingChangeListener(OnDrawingChangeListener onDrawingChangeListener) {
-        this.onDrawingChangeListener = onDrawingChangeListener;
-    }
-
-    public   enum Mode {
-        DRAW,
-        TEXT,
-        ERASER
-    }
-
-    public enum Drawer {
-        PEN,
-        LINE,
-        RECTANGLE,
-        CIRCLE,
-        ELLIPSE,
-        QUADRATIC_BEZIER,
-        QUBIC_BEZIER
-    }
-
+    History history = new History();
     private Canvas canvas   = null;
     private Bitmap bitmap   = null;
-
-    public class History implements Serializable{
-        public List<SerialzablePath>  pathLists  = new ArrayList<>();
-         public List<SerialzablePaint> paintLists = new ArrayList<>();
-         public List<Long> idList=new ArrayList<>();
-
-        public int historyPointer = 0;
-
-        public void add(SerialzablePath path,SerialzablePaint paint)
-        {
-            long id=onDrawingChangeListener.onDrawingAdded(paint,path);
-            idList.add(id);
-            pathLists.add(path);
-            paintLists.add(paint);
-        }
-
-        void set(int i,SerialzablePath path,SerialzablePaint paint)
-        {
-            onDrawingChangeListener.onDrawingUpdated(idList.get(i),path,paint);
-            pathLists.set(i,path);
-            paintLists.set(i,paint);
-        }
-
-        void remove(int i)
-        {
-            onDrawingChangeListener.onDrawingRemoved(idList.get(i));
-            paintLists.remove(i);
-            pathLists.remove(i);
-        }
-
-        SerialzablePath getPath(int i)
-        {
-            return pathLists.get(i);
-        }
-        SerialzablePaint getPaint(int i)
-        {
-            return paintLists.get(i);
-        }
-
-       int getSize()
-        {
-           return paintLists.size();
-        }
-    }
-
-    History history=new History();
-
-    private final SerialzablePaint emptyPaint = new SerialzablePaint();
-
     // for Eraser
     private int baseColor = Color.WHITE;
-
-    // for Undo, Redo
-    
-
     // Flags
     private Mode mode      = Mode.DRAW;
     private Drawer drawer  = Drawer.PEN;
     private boolean isDown = false;
-
     // for SerialzablePaint
     private SerialzablePaint.Style paintStyle    = SerialzablePaint.Style.STROKE;
     private int paintStrokeColor      = Color.BLACK;
+
+    // for Undo, Redo
     private int paintFillColor        = Color.BLACK;
     private float paintStrokeWidth    = 3F;
     private int opacity               = 255;
     private float blur                = 0F;
     private SerialzablePaint.Cap lineCap         = SerialzablePaint.Cap.ROUND;
-   // private PathEffect drawPathEffect = null;
-
     // for Text
     private String text           = "";
     private Typeface fontFamily   = Typeface.DEFAULT;
     private float fontSize        = 32F;
     private SerialzablePaint.Align textAlign = SerialzablePaint.Align.RIGHT;  // fixed
     private SerialzablePaint textPaint       = new SerialzablePaint();
+    // private PathEffect drawPathEffect = null;
     private float textX           = 0F;
     private float textY           = 0F;
-
     // for Drawer
     private float startX   = 0F;
     private float startY   = 0F;
     private float controlX = 0F;
     private float controlY = 0F;
-
     /**
      * Copy Constructor
      *
@@ -166,7 +82,6 @@ public class CanvasView extends View {
         super(context, attrs);
      //   this.setup();
     }
-
     /**
      * Copy Constructor
      *
@@ -178,6 +93,24 @@ public class CanvasView extends View {
       //  this.setup();
     }
 
+    /**
+     * This static method gets the designated bitmap as byte array.
+     *
+     * @param bitmap
+     * @param format
+     * @param quality
+     * @return This is returned as byte array of bitmap.
+     */
+    public static byte[] getBitmapAsByteArray(Bitmap bitmap, CompressFormat format, int quality) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(format, quality, byteArrayOutputStream);
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public void setOnDrawingChangeListener(OnDrawingChangeListener onDrawingChangeListener) {
+        this.onDrawingChangeListener = onDrawingChangeListener;
+    }
 
     /**
      * Common initialization.
@@ -408,6 +341,7 @@ public class CanvasView extends View {
                             SerialzablePath.reset();
                             SerialzablePath.moveTo(this.startX, this.startY);
                             SerialzablePath.lineTo(x, y);
+
                             break;
                         case RECTANGLE :
                             SerialzablePath.reset();
@@ -483,6 +417,7 @@ public class CanvasView extends View {
 
         // Before "drawPath"
         canvas.drawColor(this.baseColor);
+
 
         if (this.bitmap != null) {
             canvas.drawBitmap(this.bitmap, 0F, 0F, emptyPaint);
@@ -629,7 +564,6 @@ public class CanvasView extends View {
             undo();
     }
 
-
     public void clear() {
         SerialzablePath SerialzablePath = new SerialzablePath();
         SerialzablePath.moveTo(0F, 0F);
@@ -749,7 +683,7 @@ public class CanvasView extends View {
      */
     public int getPaintFillColor() {
         return this.paintFillColor;
-    };
+    }
 
     /**
      * This method is setter for fill color.
@@ -848,23 +782,6 @@ public class CanvasView extends View {
     }
 
     /**
-     * This method is getter for SerialzablePath effect of drawing.
-     *
-     * @return drawPathEffect
-//     */
-//    public PathEffect getDrawPathEffect() {
-//        return drawPathEffect;
-//    }
-//
-//    /**
-//     * This method is setter for SerialzablePath effect of drawing.
-//     *
-//     * @param drawPathEffect
-//     */
-//    public void setDrawPathEffect(PathEffect drawPathEffect) {
-//        this.drawPathEffect = drawPathEffect;
-//    }
-    /**
      * This method is getter for font size,
      *
      * @return
@@ -895,6 +812,24 @@ public class CanvasView extends View {
     public Typeface getFontFamily() {
         return this.fontFamily;
     }
+
+    /**
+     * This method is getter for SerialzablePath effect of drawing.
+     *
+     * @return drawPathEffect
+    //     */
+//    public PathEffect getDrawPathEffect() {
+//        return drawPathEffect;
+//    }
+//
+//    /**
+//     * This method is setter for SerialzablePath effect of drawing.
+//     *
+//     * @param drawPathEffect
+//     */
+//    public void setDrawPathEffect(PathEffect drawPathEffect) {
+//        this.drawPathEffect = drawPathEffect;
+//    }
 
     /**
      * This method is setter for font-family.
@@ -949,21 +884,6 @@ public class CanvasView extends View {
     }
 
     /**
-     * This static method gets the designated bitmap as byte array.
-     *
-     * @param bitmap
-     * @param format
-     * @param quality
-     * @return This is returned as byte array of bitmap.
-     */
-    public static byte[] getBitmapAsByteArray(Bitmap bitmap, CompressFormat format, int quality) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(format, quality, byteArrayOutputStream);
-
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    /**
      * This method gets the bitmap as byte array.
      *
      * @param format
@@ -985,6 +905,73 @@ public class CanvasView extends View {
      */
     public byte[] getBitmapAsByteArray() {
         return this.getBitmapAsByteArray(CompressFormat.PNG, 100);
+    }
+
+    public enum Mode {
+        DRAW,
+        TEXT,
+        ERASER
+    }
+
+    public enum Drawer {
+        PEN,
+        LINE,
+        RECTANGLE,
+        CIRCLE,
+        ELLIPSE,
+        QUADRATIC_BEZIER,
+        QUBIC_BEZIER
+    }
+
+    public interface OnDrawingChangeListener {
+        long onDrawingAdded(SerialzablePaint paint, SerialzablePath path);
+
+        void onDrawingRemoved(long id);
+
+        void onDrawingUpdated(long id, SerialzablePath path, SerialzablePaint paint);
+
+        void initializeHistory(History history);
+
+    }
+
+    public class History implements Serializable {
+        public List<SerialzablePath> pathLists = new ArrayList<>();
+        public List<SerialzablePaint> paintLists = new ArrayList<>();
+        public List<Long> idList = new ArrayList<>();
+
+        public int historyPointer = 0;
+
+        public void add(SerialzablePath path, SerialzablePaint paint) {
+            long id = onDrawingChangeListener.onDrawingAdded(paint, path);
+            idList.add(id);
+            pathLists.add(path);
+            paintLists.add(paint);
+        }
+
+        void set(int i, SerialzablePath path, SerialzablePaint paint) {
+            onDrawingChangeListener.onDrawingUpdated(idList.get(i), path, paint);
+            pathLists.set(i, path);
+            paintLists.set(i, paint);
+
+        }
+
+        void remove(int i) {
+            onDrawingChangeListener.onDrawingRemoved(idList.get(i));
+            paintLists.remove(i);
+            pathLists.remove(i);
+        }
+
+        SerialzablePath getPath(int i) {
+            return pathLists.get(i);
+        }
+
+        SerialzablePaint getPaint(int i) {
+            return paintLists.get(i);
+        }
+
+        int getSize() {
+            return paintLists.size();
+        }
     }
 
    /* public void paintBucket( Point pt,  int replacementColor)
