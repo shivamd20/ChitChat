@@ -9,25 +9,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import io.hasura.sdk.Callback;
 import io.hasura.sdk.Hasura;
 import io.hasura.sdk.HasuraUser;
 import io.hasura.sdk.exception.HasuraException;
-import io.hasura.sdk.responseListener.AuthResponseListener;
-import io.hasura.sdk.responseListener.LogoutResponseListener;
 import io.hasura.shivam.chitchat.R;
 import io.hasura.shivam.chitchat.database.Person;
 import io.hasura.shivam.chitchat.queclasses.PersonDetails;
 import io.hasura.shivam.chitchat.queclasses.SelectQueryPerson;
 
 public class ApiTestingActivity extends AppCompatActivity {
+    //
 
     HasuraUser user=Hasura.getClient().getUser();
     @Override
