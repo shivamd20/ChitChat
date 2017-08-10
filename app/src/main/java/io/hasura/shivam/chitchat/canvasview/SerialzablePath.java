@@ -44,7 +44,11 @@ public class SerialzablePath extends Path  implements Serializable{
     private Direction dirRect;
 
    public void initialize() {
+
+
        moveTo(movX, movY);
+
+
        addCircle(cirx, ciry, cirr, Direction.CW);
 
         lineTo(linex,lineY);
