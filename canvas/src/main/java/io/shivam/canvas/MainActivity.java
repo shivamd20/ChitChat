@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
         wv.getSettings().setJavaScriptEnabled(true);
 
         // Get the Android assets folder path
-        String folderPath = "file:///android_asset/canvas/";
+        String folderPath = "file:///android_asset/fabric/";
 
         // Get the HTML file name
-        String fileName = "index.html";
+        String fileName = "test.html";
 
         // Get the exact file location
         String file = folderPath + fileName;
@@ -54,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         wv.setBackgroundColor(Color.RED);
+
+        wv.addJavascriptInterface(new WebAppInterface(this), "Android");
+
+
 
 
     }

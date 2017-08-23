@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
@@ -470,7 +471,7 @@ canvas.setMode(CanvasView.Mode.ERASER);
             image.compress(Bitmap.CompressFormat.PNG, 90, fos);
             fos.close();
 
-            //    Toast.makeText(getContext(),"image saved to "+pictureFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "image saved to " + pictureFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
 
         } catch (FileNotFoundException e) {
             Log.d("", "File not found: " + e.getMessage());
